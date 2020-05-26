@@ -2,7 +2,7 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {FilterValuesType} from "./App";
 
 // условия типов пропсов для тасок
-type TaskType = { //type какого типа будут таски, использующиеся в PropsType  Array<TaskType>
+export type TaskType = { //type какого типа будут таски, использующиеся в PropsType  Array<TaskType>
     id: string
     title: string
     isDone: boolean
@@ -13,9 +13,9 @@ type PropsType = {
     title: string // в title можно писать только строку
     tasks: Array<TaskType> // тип массив объектов // type TaskType
     // tasks: TaskType []  - можно так же писать и будет работать
-    removeTask: (taskId: string) => void // удаление тасок происходит только по id и типу string
+    removeTask: (taskId: string) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
     changeFilter: (value: FilterValuesType ) => void // в changeFilter можно указать только строку и точное название ("All" |(<- или) "Active" |(<- или) "Completed") или алл или актив или комплетед. ТС будет следить за правильностью написания данных
-    addTask: (title: string) => void // функция которая принимает title string
+    addTask: (title: string) => void // функция которая принимает title string и ничего не возвращает
 }
 
 
