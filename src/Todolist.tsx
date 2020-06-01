@@ -16,6 +16,8 @@ type PropsType = {
     removeTask: (taskId: string) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
     changeFilter: (value: FilterValuesType ) => void // в changeFilter можно указать только строку и точное название ("All" |(<- или) "Active" |(<- или) "Completed") или алл или актив или комплетед. ТС будет следить за правильностью написания данных
     addTask: (title: string) => void // функция которая принимает title string и ничего не возвращает
+    changeTaskStatus: (id: string, isDone: boolean) => void //isDone меняет значения
+    filter: FilterValuesType
 }
 
 
@@ -24,11 +26,24 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
     //стейт новых тасок.
     const [newTaskTitle, setNewTaskTitle] = useState('');
 
-    // добавление новой таски
+    /* добавление новой таски
+    cтарое добавление таски
     const addTask = () => { // в callback функции отдаем значение наверх в стейт апп
         props.addTask(newTaskTitle); // в пропсах к нам приходит функция добавления новой таски. в эту функцию мы кладем значения новой таски из стейта новых тасок и передаем это в колбеках
         setNewTaskTitle(''); // зануляем значение в input == очистить значение в стейте
-    }
+    }*/
+
+    let [error, setError] = useState < string | null > (null)
+
+    // новое добавление таски с защитой от пустого инпута
+    const addTask = () => { // callback
+      if (newTaskTitle.trim() !== '') {
+          props.addTask(newTaskTitle);
+          setNewTaskTitle('');
+      } else {
+          setError('Title is required');
+      }
+   }
 
     // читаем введенные значения в инпуте и отправляем его наверх в апп с помощью колбек функции
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,14 +56,18 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
 
     // добавляем таску с ENTER
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => { //берем событие с клавиатуры из инпута  (e: KeyboardEvent<HTMLInputElement>) KeyboardEvent происходит с инпутом (HTMLInputElement)
+        setError(null);
         if (e.charCode === 13) { // charCode это значение кнопок клавы на машином языке, понять номер каждой клавиши можно на сайте https://keycode.info/. если нажатие клавиши на клаве ентер, то по чаркоду это 13, если это равно по типу 13 то добавь новую таску
             addTask(); // добавь таску
         }
     }
 
+    // кнопки
     const onAllClickHandler = () => {props.changeFilter ("All")} // кнопка all отдает значение наверх и в APP уже меняется стейт
     const onActiveClickHandler = () => {props.changeFilter ("Active")} // кнопка Active отдает значение наверх и в APP уже меняется стейт
     const onCompletedClickHandler = () => {props.changeFilter ("Completed")} // кнопка Completed отдает значение наверх и в APP уже меняется стейт
+
+
 
     return (
         <div>
@@ -62,6 +81,7 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
                 <button
                     onClick={addTask} //при нажатии на кнопку вызываем функцию addTask и отдаем значение обратно наверх, где сработает функция добавления таски (addTask для app)
                 >+</button>
+                {error && <div className={'error-message'}>{error}</div>}
             </div>
             <ul>
                 {
@@ -69,20 +89,27 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
 
                         const onClickHandler = () => props.removeTask(t.id) //при нажатии кнопки удаляется таска. ВАЖНО функция removeTask вызывается и туда залетают параметры с id и улетает назад в колбеке
 
-                        return (<li>
-                            <input
-                                type="checkbox"
-                                checked={t.isDone}/> {/*состояние галки*/}
-                            <span>{t.title}</span> {/*сами таски*/}
-                            <button onClick={onClickHandler}>x</button>
-                        </li>)
+                        const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                            let newIsDoneValue = e.currentTarget.checked;
+                            props.changeTaskStatus (t.id, newIsDoneValue);
+                        }
+
+                        return (
+                            <li key={t.id} className={t.isDone ? 'is-done' : ''}>
+                                <input
+                                    type="checkbox"
+                                    onChange={onChangeHandler}
+                                    checked={t.isDone}/> {/*состояние галки*/}
+                                <span>{t.title}</span> {/*сами таски*/}
+                                <button onClick={onClickHandler}>x</button>
+                            </li>)
                         })
                 }
             </ul>
             <div>
-                <button onClick={onAllClickHandler}>All</button>
-                <button onClick={onActiveClickHandler}>Active</button>
-                <button onClick={onCompletedClickHandler}>Completed</button>
+                <button className={props.filter === 'All' ? 'active-filter' : ''} onClick={onAllClickHandler}>All</button>
+                <button className={props.filter === 'Active' ? 'active-filter' : ''} onClick={onActiveClickHandler}>Active</button>
+                <button className={props.filter === 'Completed' ? 'active-filter' : ''} onClick={onCompletedClickHandler}>Completed</button>
             </div>
         </div>
     )

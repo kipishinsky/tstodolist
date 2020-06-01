@@ -4,8 +4,6 @@ import {TaskType, Todolist} from "./Todolist";
 
 import {v1} from "uuid"; // генерит айдишки
 
-// Ошибки:
-// failed to compile: is not defined - не определено
 
 export type FilterValuesType = "All" | "Active" | "Completed" ; // тип значения фильтров (пропсов) для кнопок
 
@@ -95,7 +93,7 @@ function App() {
             tasksForTodolist = tasks.filter (t => t.isDone === true); // если при фильтре у таски isDone = true, от пропустят таски только с true
         }
 
-    // меняем данные кнопок не хардкодом, а при нажатии
+    // меняем данные кнопок не хардкодом, а при нажатии (change Filter - изменить фильтр)
     function changeFilter (value: FilterValuesType) { // принимает значение value. value строго типизированно FilterValuesType
         setFilter (value); // когда в value попадет значение через колбеки из нажатой кнопки в тудулисте: либо ALL, либо Active, либо Completed, то функция setFilter изменит стейт родителя и реакт запустит перерисовку
     }
@@ -118,6 +116,15 @@ function App() {
         setTasks (filteredTasks); // функция setTasks кидает отфильтрованный массив filteredTasks в стейт и раз мы изменили стейт, то реакт автоматически запускает перерисовку
     }
 
+    // change Status - изменить статус, изменить статус таски в isDone
+    function changeStatus (id: string, isDone: boolean) { // функция changeStatus принимает строкой айдишник из библиотеки v1, isDone булевы
+        let task = tasks.find ( t => t.id === id ); // find ищет id-шку в массиве tasks и пропускает таску по определенному id
+        if (task) {
+            task.isDone = isDone;
+            setTasks ([...tasks]);
+        }
+    }
+
 
     return (
         <div className={'App'}>
@@ -127,6 +134,8 @@ function App() {
                 removeTask={removeTask} //  удаление таски
                 changeFilter={changeFilter} // юзабельность кнопок all active completed
                 addTask={addTask} // добавление таски
+                changeTaskStatus={changeStatus}
+                filter={filter}
             />
         </div>
     );
