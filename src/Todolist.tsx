@@ -15,7 +15,7 @@ type PropsType = {
     // tasks: TaskType []  - можно так же писать и будет работать
     removeTask: (taskId: string) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
     changeFilter: (value: FilterValuesType ) => void // в changeFilter можно указать только строку и точное название ("All" |(<- или) "Active" |(<- или) "Completed") или алл или актив или комплетед. ТС будет следить за правильностью написания данных
-    addTask: (title: string) => void // функция которая принимает title string и ничего не возвращает
+    addNewTask: (title: string) => void // функция которая принимает title string и ничего не возвращает
     changeTaskStatus: (id: string, isDone: boolean) => void //isDone меняет значения
     filter: FilterValuesType
 }
@@ -25,24 +25,29 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
 
     //стейт новых тасок.
     const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [error, setError] = useState < string | null > (null)
 
-    /* добавление новой таски
-    cтарое добавление таски
+    /* cтарое добавление новой таски
     const addTask = () => { // в callback функции отдаем значение наверх в стейт апп
         props.addTask(newTaskTitle); // в пропсах к нам приходит функция добавления новой таски. в эту функцию мы кладем значения новой таски из стейта новых тасок и передаем это в колбеках
         setNewTaskTitle(''); // зануляем значение в input == очистить значение в стейте
     }*/
 
-    let [error, setError] = useState < string | null > (null)
-
     // новое добавление таски с защитой от пустого инпута
-    const addTask = () => { // callback
+    const addTaskClickButton = () => {
       if (newTaskTitle.trim() !== '') {
-          props.addTask(newTaskTitle);
+          props.addNewTask(newTaskTitle);
           setNewTaskTitle('');
       } else {
           setError('Title is required');
       }
+        // const addTaskClickButton = () => { // callback функция при нажатии +
+        //  if (newTaskTitle.trim() !== '') { // если при добавлении таски в поле ввода введенные значения без пробелов не равны пустой строке
+        //      props.addNewTask(newTaskTitle);; // то вызови функцию addNewTask и положи в нее newTaskTitle ( то значение, которое пришло из инпута и прошло проверку)
+        //      setNewTaskTitle(''); // потом сетни в стейт дефолтное значение с пустой строкой
+        //  } else { // иначе
+        //           setError('Title is required'); // выведи надпись
+        //  }
    }
 
     // читаем введенные значения в инпуте и отправляем его наверх в апп с помощью колбек функции
@@ -58,7 +63,7 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => { //берем событие с клавиатуры из инпута  (e: KeyboardEvent<HTMLInputElement>) KeyboardEvent происходит с инпутом (HTMLInputElement)
         setError(null);
         if (e.charCode === 13) { // charCode это значение кнопок клавы на машином языке, понять номер каждой клавиши можно на сайте https://keycode.info/. если нажатие клавиши на клаве ентер, то по чаркоду это 13, если это равно по типу 13 то добавь новую таску
-            addTask(); // добавь таску
+            addTaskClickButton(); // добавь таску
         }
     }
 
@@ -66,8 +71,6 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
     const onAllClickHandler = () => {props.changeFilter ("All")} // кнопка all отдает значение наверх и в APP уже меняется стейт
     const onActiveClickHandler = () => {props.changeFilter ("Active")} // кнопка Active отдает значение наверх и в APP уже меняется стейт
     const onCompletedClickHandler = () => {props.changeFilter ("Completed")} // кнопка Completed отдает значение наверх и в APP уже меняется стейт
-
-
 
     return (
         <div>
@@ -79,7 +82,7 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
                     onKeyPress={onKeyPressHandler} // callback // (onKeyPress - когда клавиша нажата. onKeyDown - когда клавиша нажата, но не отпущена. onKeyUp когда клавиша поднята. onKeyDown+onKeyUp = onKeyPress) при нажатии enter добавляем таску
                 />
                 <button
-                    onClick={addTask} //при нажатии на кнопку вызываем функцию addTask и отдаем значение обратно наверх, где сработает функция добавления таски (addTask для app)
+                    onClick={addTaskClickButton} //при нажатии на кнопку вызываем функцию addTask и отдаем значение обратно наверх, где сработает функция добавления таски (addTask для app)
                 >+</button>
                 {error && <div className={'error-message'}>{error}</div>}
             </div>
@@ -92,6 +95,9 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
                         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                             let newIsDoneValue = e.currentTarget.checked;
                             props.changeTaskStatus (t.id, newIsDoneValue);
+                            // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                            //    let newIsDoneValue = e.currentTarget.checked;
+                            //    props.changeTaskStatus (t.id, newIsDoneValue);
                         }
 
                         return (

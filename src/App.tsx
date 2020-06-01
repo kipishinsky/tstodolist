@@ -99,7 +99,7 @@ function App() {
     }
 
     // добавление новой таски
-    function addTask (title: string) {
+    function addNewTask (title: string) {
         let task = {
             id: v1(),
             title: title,
@@ -123,8 +123,13 @@ function App() {
             task.isDone = isDone;
             setTasks ([...tasks]);
         }
-    }
+        // функция ждет в пропсах данные из колбеков ( нажали на кнопку, поменяли галку, пришла смена галки в функция и пришел вместе с галкой айдишник таски у которой сменилась галка)
+        // task = массив тасок фильтруется методом find (возвращает значение первого элемента в массиве, который соответствует условию в переданной функции, или undefined, если ни один элемент не удовлетворяет условию в переданной функции)
+        // и как только находится таска с нужным id(t.id === id) она преобразуется в таску t и let task = t (таске с верным айдишником)
+        // и если таска (if (task)) пришла со значение true или false в пропсах (task.isDone) то поменяй мне это значение в стейте task.isDone = isDone;
+        // и потом вызываем функцию setTasks  и кладем в нее ([...tasks]) новые измененный стейт тасок
 
+    };
 
     return (
         <div className={'App'}>
@@ -133,9 +138,9 @@ function App() {
                 tasks={tasksForTodolist}  // отфильтрованные таски по кнопкам
                 removeTask={removeTask} //  удаление таски
                 changeFilter={changeFilter} // юзабельность кнопок all active completed
-                addTask={addTask} // добавление таски
-                changeTaskStatus={changeStatus}
-                filter={filter}
+                addNewTask={addNewTask} // добавление новой таски
+                changeTaskStatus={changeStatus} //передаем функцию, чтобы менять статус таске
+                filter={filter} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
             />
         </div>
     );
