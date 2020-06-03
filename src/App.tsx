@@ -1,11 +1,17 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TaskType, Todolist} from "./Todolist";
+import {Todolist} from "./Todolist";
 
 import {v1} from "uuid"; // генерит айдишки
 
 
-export type FilterValuesType = "All" | "Active" | "Completed" ; // тип значения фильтров (пропсов) для кнопок
+export type FilterValuesType = 'All' | 'Active' | 'Completed' ; // тип значения фильтров (пропсов) для кнопок
+
+export type TodolistsType = {
+    id: string
+    title: string
+    filter: FilterValuesType
+}
 
 function App() {
 
@@ -73,7 +79,7 @@ function App() {
 
     </div>*/
 
-    //стейт тасок tasks массив тасок, setTasks функция, которая может поменять массив тасок
+/*    //стейт тасок tasks массив тасок, setTasks функция, которая может поменять массив тасок
     let [tasks, setTasks] = useState <Array<TaskType>> ([   // массив тасок const - неизменяемо //  useState хранит массив <Array<TaskType>> (useState <Array<TaskType>>) , который к нам приходит через export из todolist и  обязательный инпут там, куда он пришел и используется. Тем самым мы указали тайп скрипту где нужно отслеживать все значения
         { id: v1(), title: "HTML&CSS", isDone: true},
         { id: v1(), title: "JS", isDone: true},
@@ -81,67 +87,107 @@ function App() {
         { id: v1(), title: "TypeScript", isDone: true},
         { id: v1(), title: "Rest API", isDone: false},
         { id: v1(), title: "GraphQL", isDone: false}
-    ]);
+    ]);*/
 
-    // менять значение кнопок алл, актив, комлитед
-    let [filter, setFilter] = useState <FilterValuesType> ("All"); // со старта висит ALL.  useState хранит массив FilterValuesType (useState <FilterValuesType>)
-    let tasksForTodolist = tasks; // не можем менять напрямую стейт тасок
-        if (filter === "Active") { // при нажатии кнопки active
-            tasksForTodolist = tasks.filter (t => t.isDone === false); // если при фильтре у таски isDone = false, от пропустят таски только с false
-        }
-        if (filter === "Completed") { // при нажатии кнопки Completed
-            tasksForTodolist = tasks.filter (t => t.isDone === true); // если при фильтре у таски isDone = true, от пропустят таски только с true
-        }
+    let todoListId1 = v1();
+    let todoListId2 = v1();
+
+
+    let [todolists, setTodolists] = useState <Array<TodolistsType>> ([
+        {
+            id: todoListId1,
+            title: 'What to learn',
+            filter: 'All'
+            },
+
+        {
+            id: todoListId2,
+            title: 'What to buy',
+            filter: 'All'
+            }
+    ])
+
+
+    let [tasks, setTasks] = useState ({
+        [todoListId1]: [
+            { id: v1(), title: "HTML&CSS", isDone: true},
+            { id: v1(), title: "JS", isDone: true},
+            { id: v1(), title: "React js", isDone: false},
+            { id: v1(), title: "TypeScript", isDone: true},
+            { id: v1(), title: "Rest API", isDone: false},
+            { id: v1(), title: "GraphQL", isDone: false}
+        ],
+        [todoListId2]: [
+            {id: v1(), title: 'Milk', isDone: false},
+            {id: v1(), title: 'Iphone', isDone: true},
+            {id: v1(), title: 'React book', isDone: true},
+            {id: v1(), title: 'Bicycle', isDone: false}
+        ]
+    })
 
     // меняем данные кнопок не хардкодом, а при нажатии (change Filter - изменить фильтр)
-    function changeFilter (value: FilterValuesType) { // принимает значение value. value строго типизированно FilterValuesType
-        setFilter (value); // когда в value попадет значение через колбеки из нажатой кнопки в тудулисте: либо ALL, либо Active, либо Completed, то функция setFilter изменит стейт родителя и реакт запустит перерисовку
+    function changeFilter (value: FilterValuesType, todoListId: string) {
+        let todolist = todolists.find ( tl => tl.id === todoListId);
+        if (todolist) {
+            todolist.filter = value
+            setTodolists ([...todolists])
+        }
     }
 
     // добавление новой таски
-    function addNewTask (title: string) {
-        let task = {
-            id: v1(),
-            title: title,
-            isDone: false
-        };
-        let newTasks = [task, ...tasks];
-        setTasks (newTasks);
+    function addNewTask (title: string, todoListId: string) {
+        let todoListTasks = tasks[todoListId]; // достанем нужный массив по todolistID
+        let task = {id: v1(), title: title, isDone: false}; // перезапишем в этом объекте массив для нужного тудулиста копией,
+        tasks[todoListId] = [task, ...todoListTasks];
+        setTasks({...tasks})
     }
 
     // удаление таски по id
-    function removeTask (id: string) { // propsы строка
-        let filteredTasks = tasks.filter( (t) => t.id !== id) // метод filter массива пробегает по всем объектам и
-        // заносит в новый объект только те элементы, которые удоволетворяют условиям ( отрисовывается каждая таска которая не равна удаленному ID)
-        setTasks (filteredTasks); // функция setTasks кидает отфильтрованный массив filteredTasks в стейт и раз мы изменили стейт, то реакт автоматически запускает перерисовку
+    function removeTask (id: string, todoListId: string) {  // propsы строка
+
+        let todoListTasks = tasks[todoListId];
+        tasks[todoListId] = todoListTasks.filter (t => t.id != id);
+        setTasks({... tasks})
     }
 
     // change Status - изменить статус, изменить статус таски в isDone
-    function changeStatus (id: string, isDone: boolean) { // функция changeStatus принимает строкой айдишник из библиотеки v1, isDone булевы
-        let task = tasks.find ( t => t.id === id ); // find ищет id-шку в массиве tasks и пропускает таску по определенному id
+    function changeStatus (id: string, isDone: boolean, todoListId: string) { // функция changeStatus принимает строкой айдишник из библиотеки v1, isDone булевы
+        let todoListTasks = tasks[todoListId];
+        let task = todoListTasks.find (t=> t.id === id)
         if (task) {
             task.isDone = isDone;
-            setTasks ([...tasks]);
+            setTasks ({... tasks})
         }
-        // функция ждет в пропсах данные из колбеков ( нажали на кнопку, поменяли галку, пришла смена галки в функция и пришел вместе с галкой айдишник таски у которой сменилась галка)
-        // task = массив тасок фильтруется методом find (возвращает значение первого элемента в массиве, который соответствует условию в переданной функции, или undefined, если ни один элемент не удовлетворяет условию в переданной функции)
-        // и как только находится таска с нужным id(t.id === id) она преобразуется в таску t и let task = t (таске с верным айдишником)
-        // и если таска (if (task)) пришла со значение true или false в пропсах (task.isDone) то поменяй мне это значение в стейте task.isDone = isDone;
-        // и потом вызываем функцию setTasks  и кладем в нее ([...tasks]) новые измененный стейт тасок
-
-    };
+    }
 
     return (
         <div className={'App'}>
-            <Todolist
-                title={"What to learn"} // заголовки компоненты
-                tasks={tasksForTodolist}  // отфильтрованные таски по кнопкам
-                removeTask={removeTask} //  удаление таски
-                changeFilter={changeFilter} // юзабельность кнопок all active completed
-                addNewTask={addNewTask} // добавление новой таски
-                changeTaskStatus={changeStatus} //передаем функцию, чтобы менять статус таске
-                filter={filter} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
-            />
+            {
+                todolists.map ( (tl) => {
+                    let allTodoListTasks = tasks[tl.id];
+                    let tasksForTodoList = allTodoListTasks;
+                    if (tl.filter === 'Active') { // при нажатии кнопки active
+                        tasksForTodoList = allTodoListTasks.filter ( t => t.isDone === false) // если при фильтре у таски isDone = false, от пропустят таски только с false
+                    }
+                    if (tl.filter === 'Completed') { // при нажатии кнопки Completed
+                        tasksForTodoList = allTodoListTasks.filter ( t => t.isDone === true) // если при фильтре у таски isDone = true, от пропустят таски только с true
+                    }
+
+                    return (
+                        <Todolist
+                            key={tl.id}
+                            id={tl.id}
+                            title={tl.title} // заголовки компоненты
+                            tasks={tasksForTodoList}  // отфильтрованные таски по кнопкам
+                            removeTask={removeTask} //  удаление таски
+                            changeFilter={changeFilter} // юзабельность кнопок all active completed
+                            addNewTask={addNewTask} // добавление новой таски
+                            changeTaskStatus={changeStatus} //передаем функцию, чтобы менять статус таске
+                            filter={tl.filter} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
+                        />
+                    )
+                })
+            }
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {FilterValuesType} from "./App";
+import {FilterValuesType, TodolistsType} from "./App";
 
 // условия типов пропсов для тасок
 export type TaskType = { //type какого типа будут таски, использующиеся в PropsType  Array<TaskType>
@@ -10,13 +10,14 @@ export type TaskType = { //type какого типа будут таски, и�
 
 // условия типов пропсов для функции тудулист
 type PropsType = {
+    id: string
     title: string // в title можно писать только строку
     tasks: Array<TaskType> // тип массив объектов // type TaskType
     // tasks: TaskType []  - можно так же писать и будет работать
-    removeTask: (taskId: string) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
-    changeFilter: (value: FilterValuesType ) => void // в changeFilter можно указать только строку и точное название ("All" |(<- или) "Active" |(<- или) "Completed") или алл или актив или комплетед. ТС будет следить за правильностью написания данных
-    addNewTask: (title: string) => void // функция которая принимает title string и ничего не возвращает
-    changeTaskStatus: (id: string, isDone: boolean) => void //isDone меняет значения
+    removeTask: (id: string, todoListId: string) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
+    changeFilter: (value: FilterValuesType, todoListId: string) => void // в changeFilter можно указать только строку и точное название ("All" |(<- или) "Active" |(<- или) "Completed") или алл или актив или комплетед. ТС будет следить за правильностью написания данных
+    addNewTask: (title: string, todoListId: string) => void // функция которая принимает title string и ничего не возвращает
+    changeTaskStatus: (id: string, isDone: boolean, todoListId: string) => void //isDone меняет значения
     filter: FilterValuesType
 }
 
@@ -36,7 +37,7 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
     // новое добавление таски с защитой от пустого инпута
     const addTaskClickButton = () => {
       if (newTaskTitle.trim() !== '') {
-          props.addNewTask(newTaskTitle);
+          props.addNewTask(newTaskTitle, props.id);
           setNewTaskTitle('');
       } else {
           setError('Title is required');
@@ -68,9 +69,9 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
     }
 
     // кнопки
-    const onAllClickHandler = () => {props.changeFilter ("All")} // кнопка all отдает значение наверх и в APP уже меняется стейт
-    const onActiveClickHandler = () => {props.changeFilter ("Active")} // кнопка Active отдает значение наверх и в APP уже меняется стейт
-    const onCompletedClickHandler = () => {props.changeFilter ("Completed")} // кнопка Completed отдает значение наверх и в APP уже меняется стейт
+    const onAllClickHandler = () => {props.changeFilter ('All', props.id)} // кнопка all отдает значение наверх и в APP уже меняется стейт
+    const onActiveClickHandler = () => {props.changeFilter ('Active', props.id)} // кнопка Active отдает значение наверх и в APP уже меняется стейт
+    const onCompletedClickHandler = () => {props.changeFilter ('Completed', props.id)} // кнопка Completed отдает значение наверх и в APP уже меняется стейт
 
     return (
         <div>
@@ -90,11 +91,11 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
                 {
                     props.tasks.map ((t) => { // метод map на основе всех элементов создает новый массив с видоизменными элементами (другими объектами)
 
-                        const onClickHandler = () => props.removeTask(t.id) //при нажатии кнопки удаляется таска. ВАЖНО функция removeTask вызывается и туда залетают параметры с id и улетает назад в колбеке
+                        const onClickHandler = () => props.removeTask(t.id, props.id) //при нажатии кнопки удаляется таска. ВАЖНО функция removeTask вызывается и туда залетают параметры с id и улетает назад в колбеке
 
                         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                             let newIsDoneValue = e.currentTarget.checked;
-                            props.changeTaskStatus (t.id, newIsDoneValue);
+                            props.changeTaskStatus (t.id, newIsDoneValue, props.id);
                             // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                             //    let newIsDoneValue = e.currentTarget.checked;
                             //    props.changeTaskStatus (t.id, newIsDoneValue);
@@ -107,7 +108,7 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
                                     onChange={onChangeHandler}
                                     checked={t.isDone}/> {/*состояние галки*/}
                                 <span>{t.title}</span> {/*сами таски*/}
-                                <button onClick={onClickHandler}>x</button>
+                                <button onClick={onClickHandler}>x</button> {/* удаляем таску */}
                             </li>)
                         })
                 }

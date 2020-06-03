@@ -1,24 +1,40 @@
 .App {
-  padding: 30px;
-  display: flex;
+  padding: 30px; /*
+  Свойство padding устанавливает внутренние отступы/поля со всех сторон элемента.
+  */
+  display: flex; /*
+Внутренние div-ы выстраиваются в ряд (вдоль главной оси) колонками
+одинаковой высоты, независимо от содержимого.
+*/
 }
 
 .App > div {
-  margin-right: 50px;
+  margin-right: 50px; /*
+  Устанавливает величину отступа от правого края элемента.
+  */
 }
 
 .error {
-  border: red 1px solid;
+  border: red 1px solid; /*
+  Универсальное свойство border позволяет одновременно установить толщину,
+  стиль и цвет границы вокруг элемента
+  */
 }
 
 .error-message {
-  color: red;
+  color: red; /*
+  цвет
+  */
 }
 
 .active-filter {
-  background-color: aquamarine;
+  background-color: aquamarine; /*
+  Определяет цвет фона элемента
+  */
 }
 
 .is-done {
-  opacity: 0.5;
+  opacity: 0.5; /*
+  Определяет уровень прозрачности элемента веб-страницы.
+  */
 }
