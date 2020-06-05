@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {FilterValuesType, TodolistsType} from "./App";
+import {FilterValuesType} from "./App";
 
 // условия типов пропсов для тасок
 export type TaskType = { //type какого типа будут таски, использующиеся в PropsType  Array<TaskType>
@@ -19,6 +19,7 @@ type PropsType = {
     addNewTask: (title: string, todoListId: string) => void // функция которая принимает title string и ничего не возвращает
     changeTaskStatus: (id: string, isDone: boolean, todoListId: string) => void //isDone меняет значения
     filter: FilterValuesType
+    removeTodoList: (id: string) => void
 }
 
 
@@ -73,9 +74,14 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
     const onActiveClickHandler = () => {props.changeFilter ('Active', props.id)} // кнопка Active отдает значение наверх и в APP уже меняется стейт
     const onCompletedClickHandler = () => {props.changeFilter ('Completed', props.id)} // кнопка Completed отдает значение наверх и в APP уже меняется стейт
 
+
+
     return (
         <div>
-            <h3>{props.title}</h3> {/*заголовки тасок*/}
+            <div className={'deleteWrapper'}>
+                <h3 className={'deleteTitle'}>{props.title}</h3> {/*заголовки тасок*/}
+                <button className={'deleteButton'} onClick={ () => {props.removeTodoList(props.id)}}>X</button>
+            </div>
             <div>
                 <input //поле ввода
                     onChange={onChangeHandler} // callback // onChange показывает и позволяет изменять значения поля ввода

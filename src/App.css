@@ -38,3 +38,19 @@
   Определяет уровень прозрачности элемента веб-страницы.
   */
 }
+
+.deleteWrapper {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+.deleteButton {
+  height: 25px;
+  width: 25px;
+
+}
+
+.deleteTitle {
+  padding: 5px;
+}

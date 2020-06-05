@@ -1,16 +1,20 @@
 import React, {useState} from 'react';
 import './App.css';
-import {Todolist} from "./Todolist";
+import {TaskType, Todolist} from "./Todolist";
 
 import {v1} from "uuid"; // генерит айдишки
 
 
 export type FilterValuesType = 'All' | 'Active' | 'Completed' ; // тип значения фильтров (пропсов) для кнопок
 
-export type TodolistsType = {
+export type TodoListsType = {
     id: string
     title: string
     filter: FilterValuesType
+}
+
+type TasksStateType = {
+    [key: string]: Array<TaskType>
 }
 
 function App() {
@@ -93,7 +97,7 @@ function App() {
     let todoListId2 = v1();
 
 
-    let [todolists, setTodolists] = useState <Array<TodolistsType>> ([
+    let [todoLists, setTodoLists] = useState <Array<TodoListsType>> ([
         {
             id: todoListId1,
             title: 'What to learn',
@@ -108,7 +112,7 @@ function App() {
     ])
 
 
-    let [tasks, setTasks] = useState ({
+    let [tasks, setTasks] = useState <TasksStateType> ({
         [todoListId1]: [
             { id: v1(), title: "HTML&CSS", isDone: true},
             { id: v1(), title: "JS", isDone: true},
@@ -127,10 +131,10 @@ function App() {
 
     // меняем данные кнопок не хардкодом, а при нажатии (change Filter - изменить фильтр)
     function changeFilter (value: FilterValuesType, todoListId: string) {
-        let todolist = todolists.find ( tl => tl.id === todoListId);
+        let todolist = todoLists.find ( tl => tl.id === todoListId);
         if (todolist) {
             todolist.filter = value
-            setTodolists ([...todolists])
+            setTodoLists ([...todoLists])
         }
     }
 
@@ -160,10 +164,18 @@ function App() {
         }
     }
 
+    function removeTodoList (id: string) {
+        //засунем в стейт список тудулистов, id которых не равны тому, который нужно выкинуть
+        setTodoLists(todoLists.filter(tl=>tl.id != id));
+        // удалим таски дяля этого тудулиста из второго стейта, где мы храним отдельно таски
+        delete tasks[id]; // удаляем свойство из объекта, значение которого является массив тасок
+        setTasks({... tasks})
+    }
+
     return (
         <div className={'App'}>
             {
-                todolists.map ( (tl) => {
+                todoLists.map ( (tl) => {
                     let allTodoListTasks = tasks[tl.id];
                     let tasksForTodoList = allTodoListTasks;
                     if (tl.filter === 'Active') { // при нажатии кнопки active
@@ -184,6 +196,7 @@ function App() {
                             addNewTask={addNewTask} // добавление новой таски
                             changeTaskStatus={changeStatus} //передаем функцию, чтобы менять статус таске
                             filter={tl.filter} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
+                            removeTodoList={removeTodoList}
                         />
                     )
                 })
