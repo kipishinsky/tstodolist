@@ -14,14 +14,13 @@ type PropsType = {
     title: string // в title можно писать только строку
     tasks: Array<TaskType> // тип массив объектов // type TaskType
     // tasks: TaskType []  - можно так же писать и будет работать
-    removeTask: (id: string, todoListId: string) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
+    removeTask: (tasksId: string, todoListId: string) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
     changeFilter: (value: FilterValuesType, todoListId: string) => void // в changeFilter можно указать только строку и точное название ("All" |(<- или) "Active" |(<- или) "Completed") или алл или актив или комплетед. ТС будет следить за правильностью написания данных
-    addNewTask: (title: string, todoListId: string) => void // функция которая принимает title string и ничего не возвращает
-    changeTaskStatus: (id: string, isDone: boolean, todoListId: string) => void //isDone меняет значения
+    addNewTask: (newTitle: string, todoListId: string) => void // функция которая принимает title string и ничего не возвращает
+    changeTaskStatus: (tasksId: string, isDone: boolean, todoListId: string) => void //isDone меняет значения
     filter: FilterValuesType
-    removeTodoList: (id: string) => void
+    removeTodoList: (todoListId: string) => void
 }
-
 
 export function Todolist (props: PropsType) { // props: any - что угодно, тоесть не задали четко тип, который будет отслеживаться
 
@@ -70,17 +69,17 @@ export function Todolist (props: PropsType) { // props: any - что угодн�
     }
 
     // кнопки
-    const onAllClickHandler = () => {props.changeFilter ('All', props.id)} // кнопка all отдает значение наверх и в APP уже меняется стейт
-    const onActiveClickHandler = () => {props.changeFilter ('Active', props.id)} // кнопка Active отдает значение наверх и в APP уже меняется стейт
+    const onAllClickHandler = () => {props.changeFilter ( 'All', props.id)} // кнопка all отдает значение наверх и в APP уже меняется стейт
+    const onActiveClickHandler = () => {props.changeFilter ('Active', props.id )} // кнопка Active отдает значение наверх и в APP уже меняется стейт
     const onCompletedClickHandler = () => {props.changeFilter ('Completed', props.id)} // кнопка Completed отдает значение наверх и в APP уже меняется стейт
-
+    const removeTodoList = () => {props.removeTodoList(props.id)} // удаление тудулистов
 
 
     return (
         <div>
             <div className={'deleteWrapper'}>
                 <h3 className={'deleteTitle'}>{props.title}</h3> {/*заголовки тасок*/}
-                <button className={'deleteButton'} onClick={ () => {props.removeTodoList(props.id)}}>X</button>
+                <button className={'deleteButton'} onClick={removeTodoList}>X</button> {/*удаление тудулистов */}
             </div>
             <div>
                 <input //поле ввода

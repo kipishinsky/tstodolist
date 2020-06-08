@@ -103,14 +103,12 @@ function App() {
             title: 'What to learn',
             filter: 'All'
             },
-
         {
             id: todoListId2,
             title: 'What to buy',
             filter: 'All'
             }
     ])
-
 
     let [tasks, setTasks] = useState <TasksStateType> ({
         [todoListId1]: [
@@ -130,58 +128,61 @@ function App() {
     })
 
     // меняем данные кнопок не хардкодом, а при нажатии (change Filter - изменить фильтр)
-    function changeFilter (value: FilterValuesType, todoListId: string) {
-        let todolist = todoLists.find ( tl => tl.id === todoListId);
-        if (todolist) {
-            todolist.filter = value
+    function changeFilter (value: FilterValuesType, todoListId: string) { /*
+            в функцию в параметры кладем FilterValuesType,
+    */
+        let todoList = todoLists.find ( tl => tl.id === todoListId);
+        if (todoList) {
+            todoList.filter = value
             setTodoLists ([...todoLists])
         }
     }
 
     // добавление новой таски
-    function addNewTask (title: string, todoListId: string) {
+    function addNewTask (newTitle: string, todoListId: string) {
         let todoListTasks = tasks[todoListId]; // достанем нужный массив по todolistID
-        let task = {id: v1(), title: title, isDone: false}; // перезапишем в этом объекте массив для нужного тудулиста копией,
+        let task = {id: v1(), title: newTitle, isDone: false}; // перезапишем в этом объекте массив для нужного тудулиста копией,
         tasks[todoListId] = [task, ...todoListTasks];
         setTasks({...tasks})
     }
 
     // удаление таски по id
-    function removeTask (id: string, todoListId: string) {  // propsы строка
-
+    function removeTask (tasksId: string, todoListId: string) {  // в параметры функции передаем тудулистИд и таскИд
         let todoListTasks = tasks[todoListId];
-        tasks[todoListId] = todoListTasks.filter (t => t.id != id);
+        tasks[todoListId] = todoListTasks.filter (t => t.id != tasksId);
         setTasks({... tasks})
     }
 
     // change Status - изменить статус, изменить статус таски в isDone
-    function changeStatus (id: string, isDone: boolean, todoListId: string) { // функция changeStatus принимает строкой айдишник из библиотеки v1, isDone булевы
+    function changeStatus (tasksId: string, isDone: boolean, todoListId: string) { // функция changeStatus принимает строкой айдишник из библиотеки v1, isDone булевы
         let todoListTasks = tasks[todoListId];
-        let task = todoListTasks.find (t=> t.id === id)
+        let task = todoListTasks.find (t=> t.id === tasksId)
         if (task) {
             task.isDone = isDone;
             setTasks ({... tasks})
         }
     }
 
-    function removeTodoList (id: string) {
+    // удаление тудулиста
+    function removeTodoList (todoListId: string) {
         //засунем в стейт список тудулистов, id которых не равны тому, который нужно выкинуть
-        setTodoLists(todoLists.filter(tl=>tl.id != id));
+        setTodoLists(todoLists.filter(tl => tl.id != todoListId));
         // удалим таски дяля этого тудулиста из второго стейта, где мы храним отдельно таски
-        delete tasks[id]; // удаляем свойство из объекта, значение которого является массив тасок
+        delete tasks[todoListId]; // удаляем свойство из объекта, значение которого является массив тасок
         setTasks({... tasks})
     }
 
     return (
         <div className={'App'}>
             {
+
                 todoLists.map ( (tl) => {
-                    let allTodoListTasks = tasks[tl.id];
+                    let allTodoListTasks = tasks[tl.id]; /* берем все таски из 2 тудулистов */
                     let tasksForTodoList = allTodoListTasks;
-                    if (tl.filter === 'Active') { // при нажатии кнопки active
+                    if (tl.filter === 'Active') { // при нажатии кнопки active, фильтр сравниваем из тудулиста
                         tasksForTodoList = allTodoListTasks.filter ( t => t.isDone === false) // если при фильтре у таски isDone = false, от пропустят таски только с false
                     }
-                    if (tl.filter === 'Completed') { // при нажатии кнопки Completed
+                    if (tl.filter === 'Completed') { // при нажатии кнопки Completed, фильтр сравниваем из тудулиста
                         tasksForTodoList = allTodoListTasks.filter ( t => t.isDone === true) // если при фильтре у таски isDone = true, от пропустят таски только с true
                     }
 
