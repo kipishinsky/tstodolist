@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TaskType, Todolist} from "./Todolist";
+import {TaskType, TodoList} from "./Todolist";
 
-import {v1} from "uuid"; // генерит айдишки
+import {v1} from "uuid";
+import {AddNewItemComponent} from "./components/AddNewItemComponent"; // генерит айдишки
 
 
 export type FilterValuesType = 'All' | 'Active' | 'Completed' ; // тип значения фильтров (пропсов) для кнопок
@@ -96,8 +97,7 @@ function App() {
     let todoListId1 = v1();
     let todoListId2 = v1();
 
-
-    let [todoLists, setTodoLists] = useState <Array<TodoListsType>> ([
+    let [todoListsHook, setTodoListsHook] = useState <Array<TodoListsType>> ([
         {
             id: todoListId1,
             title: 'What to learn',
@@ -110,7 +110,7 @@ function App() {
             }
     ])
 
-    let [tasks, setTasks] = useState <TasksStateType> ({
+    let [tasksHook, setTasksHook] = useState <TasksStateType> ({
         [todoListId1]: [
             { id: v1(), title: "HTML&CSS", isDone: true},
             { id: v1(), title: "JS", isDone: true},
@@ -131,63 +131,77 @@ function App() {
     function changeFilter (value: FilterValuesType, todoListId: string) { /*
             в функцию в параметры кладем FilterValuesType,
     */
-        let todoList = todoLists.find ( tl => tl.id === todoListId);
+        let todoList = todoListsHook.find ( tl => tl.id === todoListId);
         if (todoList) {
             todoList.filter = value
-            setTodoLists ([...todoLists])
+            setTodoListsHook ([...todoListsHook])
         }
     }
 
     // добавление новой таски
     function addNewTask (newTitle: string, todoListId: string) {
-        let todoListTasks = tasks[todoListId]; // достанем нужный массив по todolistID
+        let todoListTasks = tasksHook[todoListId]; // достанем нужный массив по todolistID
         let task = {id: v1(), title: newTitle, isDone: false}; // перезапишем в этом объекте массив для нужного тудулиста копией,
-        tasks[todoListId] = [task, ...todoListTasks];
-        setTasks({...tasks})
+        tasksHook[todoListId] = [task, ...todoListTasks];
+        setTasksHook({...tasksHook})
     }
 
     // удаление таски по id
     function removeTask (tasksId: string, todoListId: string) {  // в параметры функции передаем тудулистИд и таскИд
-        let todoListTasks = tasks[todoListId];
-        tasks[todoListId] = todoListTasks.filter (t => t.id != tasksId);
-        setTasks({... tasks})
+        let todoListTasks = tasksHook[todoListId];
+        tasksHook[todoListId] = todoListTasks.filter (t => t.id != tasksId);
+        setTasksHook({... tasksHook})
     }
 
     // change Status - изменить статус, изменить статус таски в isDone
     function changeStatus (tasksId: string, isDone: boolean, todoListId: string) { // функция changeStatus принимает строкой айдишник из библиотеки v1, isDone булевы
-        let todoListTasks = tasks[todoListId];
-        let task = todoListTasks.find (t=> t.id === tasksId)
+        let todoListTasks = tasksHook[todoListId];
+        let task = todoListTasks.find (t => t.id === tasksId)
         if (task) {
             task.isDone = isDone;
-            setTasks ({... tasks})
+            setTasksHook ({... tasksHook})
         }
     }
 
     // удаление тудулиста
     function removeTodoList (todoListId: string) {
         //засунем в стейт список тудулистов, id которых не равны тому, который нужно выкинуть
-        setTodoLists(todoLists.filter(tl => tl.id != todoListId));
+        setTodoListsHook(todoListsHook.filter(tl => tl.id != todoListId));
         // удалим таски дяля этого тудулиста из второго стейта, где мы храним отдельно таски
-        delete tasks[todoListId]; // удаляем свойство из объекта, значение которого является массив тасок
-        setTasks({... tasks})
+        delete tasksHook[todoListId]; // удаляем свойство из объекта, значение которого является массив тасок
+        setTasksHook({... tasksHook})
+    }
+
+
+    function addNewTodoList (title: string) {
+        let newTodoListId = v1()
+        let newTodoList: TodoListsType = {id: newTodoListId, title: title, filter: 'All'}
+        setTodoListsHook ([newTodoList, ...todoListsHook])
+        setTasksHook ({
+            ...tasksHook,
+            [newTodoListId]: []
+        })
     }
 
     return (
-        <div className={'App'}>
-            {
 
-                todoLists.map ( (tl) => {
-                    let allTodoListTasks = tasks[tl.id]; /* берем все таски из 2 тудулистов */
+        <div className={'App'}>
+
+            <AddNewItemComponent addNewItem={addNewTodoList} />
+
+            {
+                todoListsHook.map ( (tl) => {
+                    let allTodoListTasks = tasksHook[tl.id]; /* берем все таски из 2 тудулистов */
                     let tasksForTodoList = allTodoListTasks;
                     if (tl.filter === 'Active') { // при нажатии кнопки active, фильтр сравниваем из тудулиста
-                        tasksForTodoList = allTodoListTasks.filter ( t => t.isDone === false) // если при фильтре у таски isDone = false, от пропустят таски только с false
+                        tasksForTodoList = allTodoListTasks.filter ( t => t.isDone) // если при фильтре у таски isDone = false, от пропустят таски только с false
                     }
                     if (tl.filter === 'Completed') { // при нажатии кнопки Completed, фильтр сравниваем из тудулиста
-                        tasksForTodoList = allTodoListTasks.filter ( t => t.isDone === true) // если при фильтре у таски isDone = true, от пропустят таски только с true
+                        tasksForTodoList = allTodoListTasks.filter ( t => t.isDone) // если при фильтре у таски isDone = true, от пропустят таски только с true
                     }
 
                     return (
-                        <Todolist
+                        <TodoList
                             key={tl.id}
                             id={tl.id}
                             title={tl.title} // заголовки компоненты
