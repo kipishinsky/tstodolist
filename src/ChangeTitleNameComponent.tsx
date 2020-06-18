@@ -1,23 +1,22 @@
 import React, {ChangeEvent, useState} from "react";
 
 type ChangeTitleNamePropsType = {
-    title: string
-    onChange: (newValue: string) => void
+    changeTitleValue: string
+    onChange: (newItemValue: string) => void
 }
 
-export function ChangeTitleName (props: ChangeTitleNamePropsType) {
+export function ChangeTitleNameComponent (props: ChangeTitleNamePropsType) {
 
     let [editModeHook, setEditModeHook] = useState(false);
     let [titleChangeNameHook, setTitleChangeNameHook] = useState('')
 
     const activateEditMode = () => {
         setEditModeHook(true)
-        setTitleChangeNameHook (props.title)
-        debugger
+        setTitleChangeNameHook (props.changeTitleValue) // приходит старое значение из value
     }
     const activateViewMode = () => {
         setEditModeHook(false)
-        props.onChange(titleChangeNameHook)
+        props.onChange(titleChangeNameHook) // уходит новое значение
     }
 
     const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +32,6 @@ export function ChangeTitleName (props: ChangeTitleNamePropsType) {
                 autoFocus
                 onChange={onChangeTitleHandler}
             />
-            : <span onDoubleClick={activateEditMode}>{props.title}</span>
+            : <span onDoubleClick={activateEditMode}>{props.changeTitleValue}</span>
     )
 }

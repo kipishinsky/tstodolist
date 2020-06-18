@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TaskHookType, TodoList} from "./Todolist";
+import {TLDTaskHookType, TodoList} from "./Todolist";
 
 import {v1} from "uuid";
 import {AddNewItemComponent} from "./components/AddNewItemComponent"; // генерит айдишки
@@ -15,7 +15,7 @@ export type AppTodoListsHookType = {
 }
 
 type AppTasksHookType = {
-    [key: string]: Array<TaskHookType>
+    [key: string]: Array<TLDTaskHookType>
 }
 
 function App() {
@@ -127,6 +127,19 @@ function App() {
         ]
     })
 
+    // удаление таски по id
+    function removeTask (todoListsHookID: string, tasksHookID: string) {  /*
+    в параметры функции передаем ID удаляемой таски (эта таска лежит в определенном тудулисте,
+    поэтому указываем ID тудулиста, из которого удалили таску)
+    */
+        let newTasksHook = tasksHook[todoListsHookID]; /*
+         новый массив тасок хука [у которого лежат 2 новых массива тудулистов,
+         у которого лежат 2 новых массива тасок(без той таски, что удалили)]
+        */
+        tasksHook[todoListsHookID] = newTasksHook.filter (t => t.tasksHookID != tasksHookID);
+        setTasksHook({...tasksHook})
+    }
+
     // меняем данные кнопок не хардкодом, а при нажатии (change Filter - изменить фильтр)
     function changeFilter (filterValue: AppFilterValuesType, todoListsHookID: string) { /*
             в функцию в параметры кладем FilterValuesType,
@@ -150,21 +163,8 @@ function App() {
         setTasksHook({...tasksHook})
     }
 
-    // удаление таски по id
-    function removeTask (todoListsHookID: string, tasksHookID: string) {  /*
-    в параметры функции передаем ID удаляемой таски (эта таска лежит в определенном тудулисте,
-    поэтому указываем ID тудулиста, из которого удалили таску)
-    */
-        let newTasksHook = tasksHook[todoListsHookID]; /*
-         новый массив тасок хука [у которого лежат 2 новых массива тудулистов,
-         у которого лежат 2 новых массива тасок(без той таски, что удалили)]
-        */
-        tasksHook[todoListsHookID] = newTasksHook.filter (t => t.tasksHookID != tasksHookID);
-        setTasksHook({...tasksHook})
-    }
-
     // change Status - изменить статус таски, изменить статус в isDone
-    function changeStatus (tasksHookID: string, tasksHookISDONE: boolean, todoListsHookID: string) {
+    function changeTaskStatus (tasksHookID: string, tasksHookISDONE: boolean, todoListsHookID: string) {
         let newTodoListTasks = tasksHook[todoListsHookID];
         let newTask = newTodoListTasks.find (t => t.tasksHookID === tasksHookID)
         if (newTask) {
@@ -173,8 +173,8 @@ function App() {
         }
     }
 
-    function changeTaskTitle (tasksHookID: string, taskTypeTitle: string, todoListId: string) { // функция changeStatus принимает строкой айдишник из библиотеки v1, isDone булевы
-        let newTodoListTasks = tasksHook[todoListId];
+    function changeTaskTitle (tasksHookID: string, taskTypeTitle: string, todoListsHookID: string) { // функция changeStatus принимает строкой айдишник из библиотеки v1, isDone булевы
+        let newTodoListTasks = tasksHook[todoListsHookID];
         let newTask = newTodoListTasks.find (t => t.tasksHookID === tasksHookID)
         if (newTask) {
             newTask.tasksHookTITLE = taskTypeTitle;
@@ -191,6 +191,16 @@ function App() {
         setTasksHook({...tasksHook})
     }
 
+
+    // редактирование тудулиста
+    function changeTodoListTitle (todoListsHookID: string, newChangeTitleValue: string) {
+        const todoList = todoListsHook.find(tl => tl.todoListsHookID === todoListsHookID);
+        if (todoList) {
+            todoList.todoListsHookTITLE = newChangeTitleValue;
+            setTodoListsHook([...todoListsHook])
+        }
+    }
+
     // добавление нового тудулиста
     function addNewTodoList (newTodoListTitleInput: string) { //
         let newTodoListId = v1() // присваиваем новый id
@@ -200,15 +210,6 @@ function App() {
             ...tasksHook,
             [newTodoListId]: []
         })
-    }
-
-    // редактирование тудулиста
-    function changeTodoListTitle (todoListsHookID: string, todoListsHookNewTITLEInput: string) {
-        const todoList = todoListsHook.find(tl => tl.todoListsHookID === todoListsHookID);
-        if (todoList) {
-            todoList.todoListsHookTITLE = todoListsHookNewTITLEInput;
-            setTodoListsHook([...todoListsHook])
-        }
     }
 
     return (
@@ -232,14 +233,14 @@ function App() {
                         <TodoList
                             key={tl.todoListsHookID}
                             todoListsHookID={tl.todoListsHookID}
-                            title={tl.todoListsHookTITLE} // заголовки компоненты
+                            todoListsHookTITLE={tl.todoListsHookTITLE} // заголовки компоненты
                             tasks={tasksForTodoList}  // отфильтрованные таски по кнопкам
                             removeTask={removeTask} //  удаление таски
                             changeFilter={changeFilter} // юзабельность кнопок all active completed
                             addNewTask={addNewTask} // добавление новой таски
-                            changeTaskStatus={changeStatus} //передаем функцию, чтобы менять статус таске
+                            changeTaskStatus={changeTaskStatus} //передаем функцию, чтобы менять статус таске
                             changeTaskTitle={changeTaskTitle} //передаем функцию, чтобы менять статус таске
-                            filter={tl.todoListsHookFILTER} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
+                            filterButton={tl.todoListsHookFILTER} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
                             removeTodoList={removeTodoList}
                             changeTodoListTitle={changeTodoListTitle}
                         />
