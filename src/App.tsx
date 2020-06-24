@@ -1,30 +1,21 @@
 import React, {useState} from 'react';
 import './App.css';
 import {TLDTaskHookType, TodoList} from "./components/Todolist";
-
-import {v1} from 'uuid'; // генерит айдишки
 import {AddNewItemComponent} from "./components/AddNewItemComponent";
+import {v1} from 'uuid'; // генерит айдишки
 import {AppBar, Toolbar, IconButton, Typography, Button, Container, Grid, Paper} from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
 
 
-
-
-
-
 export type AppFilterValuesType = 'All' | 'Active' | 'Completed' ; // тип значения фильтров (пропсов) для кнопок
-
 export type AppTodoListsHookType = {
     todoListsHookID: string
     todoListsHookTITLE: string
     todoListsHookFILTER: AppFilterValuesType
 }
-
 type AppTasksHookType = {
     [key: string]: Array<TLDTaskHookType>
 }
-
-function App() {
 
 /*    <div Принцип работы setState>
         пример работы useState, useState это hook (хук)
@@ -90,19 +81,10 @@ function App() {
 
     </div>*/
 
-/*    //стейт тасок tasks массив тасок, setTasks функция, которая может поменять массив тасок
-    let [tasks, setTasks] = useState <Array<TaskType>> ([   // массив тасок const - неизменяемо //  useState хранит массив <Array<TaskType>> (useState <Array<TaskType>>) , который к нам приходит через export из todolist и  обязательный инпут там, куда он пришел и используется. Тем самым мы указали тайп скрипту где нужно отслеживать все значения
-        { id: v1(), title: "HTML&CSS", isDone: true},
-        { id: v1(), title: "JS", isDone: true},
-        { id: v1(), title: "React js", isDone: false},
-        { id: v1(), title: "TypeScript", isDone: true},
-        { id: v1(), title: "Rest API", isDone: false},
-        { id: v1(), title: "GraphQL", isDone: false}
-    ]);*/
-
-    let todoListId1 = v1();
-    let todoListId2 = v1();
-
+function App() {
+    
+    let todoListId1 = v1(); let todoListId2 = v1();
+    
     let [todoListsHook, setTodoListsHook] = useState <Array<AppTodoListsHookType>> ([
         {
             todoListsHookID: todoListId1,
@@ -115,7 +97,6 @@ function App() {
             todoListsHookFILTER: 'All'
         }
     ])
-
     let [tasksHook, setTasksHook] = useState <AppTasksHookType> ({
         [todoListId1]: [
             { tasksHookID: v1(), tasksHookTITLE: "HTML&CSS", tasksHookISDONE: true},
@@ -179,7 +160,8 @@ function App() {
         }
     }
 
-    function changeTaskTitle (tasksHookID: string, taskTypeTitle: string, todoListsHookID: string) { // функция changeStatus принимает строкой айдишник из библиотеки v1, isDone булевы
+    // изменение названия таски
+    function changeTaskTitle (tasksHookID: string, taskTypeTitle: string, todoListsHookID: string) {
         let newTodoListTasks = tasksHook[todoListsHookID];
         let newTask = newTodoListTasks.find (t => t.tasksHookID === tasksHookID)
         if (newTask) {
@@ -196,8 +178,7 @@ function App() {
         delete tasksHook[todoListsHookID]; // удаляем свойство из объекта, значение которого является массив тасок
         setTasksHook({...tasksHook})
     }
-
-
+    
     // редактирование тудулиста
     function changeTodoListTitle (todoListsHookID: string, newChangeTitleValue: string) {
         const todoList = todoListsHook.find(tl => tl.todoListsHookID === todoListsHookID);
@@ -244,8 +225,8 @@ function App() {
                 </Grid>
     
                 <Grid container spacing={3}>
-                    {
-                        todoListsHook.map((tl) => {
+                    
+                    { todoListsHook.map((tl) => {
                             
                             let allTodoListTasks = tasksHook[tl.todoListsHookID]; /* берем все таски из 2 тудулистов */
                             let tasksForTodoList = allTodoListTasks;
@@ -257,8 +238,8 @@ function App() {
                             }
                 
                             return (
+                                
                                 <Grid item>
-    
                                     <Paper style={{padding: '10px'}}>
                                         <TodoList
                                             key={tl.todoListsHookID}
@@ -277,12 +258,14 @@ function App() {
                                     </Paper>
                                 </Grid>
                             )
-                        })
-                    }
+                        })}
                 </Grid>
+                
             </Container>
         </div>
     );
 }
 
 export default App;
+
+

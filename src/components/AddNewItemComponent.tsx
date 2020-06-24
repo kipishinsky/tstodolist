@@ -46,7 +46,7 @@ export function AddNewItemComponent (props: AddNewItemPropsType) {
                 value={addNewItemListHook} // callback // получаем данные из поля ввода
                 onChange={onChangeHandler} // callback // onChange показывает и позволяет изменять значения поля ввода
                 onKeyPress={onKeyPressHandler} // callback // (onKeyPress - когда клавиша нажата. onKeyDown - когда клавиша нажата, но не отпущена. onKeyUp когда клавиша поднята. onKeyDown+onKeyUp = onKeyPress) при нажатии enter добавляем таску
-                label={'Title'}
+                label={'Enter text'}
                 helperText={errorItemListHook}
             />
             <IconButton // новые кнопки из библиотеки material ui
