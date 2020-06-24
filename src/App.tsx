@@ -1,9 +1,15 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TLDTaskHookType, TodoList} from "./Todolist";
+import {TLDTaskHookType, TodoList} from "./components/Todolist";
 
-import {v1} from "uuid";
-import {AddNewItemComponent} from "./components/AddNewItemComponent"; // генерит айдишки
+import {v1} from 'uuid'; // генерит айдишки
+import {AddNewItemComponent} from "./components/AddNewItemComponent";
+import {AppBar, Toolbar, IconButton, Typography, Button, Container, Grid, Paper} from '@material-ui/core';
+import { Menu } from '@material-ui/icons';
+
+
+
+
 
 
 export type AppFilterValuesType = 'All' | 'Active' | 'Completed' ; // тип значения фильтров (пропсов) для кнопок
@@ -211,42 +217,70 @@ function App() {
             [newTodoListId]: []
         })
     }
-
+    
     return (
-
+        
         <div className={'App'}>
-
-            <AddNewItemComponent addNewItem={addNewTodoList} />
-
-            {
-                todoListsHook.map ( (tl) => {
-                    let allTodoListTasks = tasksHook[tl.todoListsHookID]; /* берем все таски из 2 тудулистов */
-                    let tasksForTodoList = allTodoListTasks;
-                    if (tl.todoListsHookFILTER === 'Active') { // при нажатии кнопки active, фильтр сравниваем из тудулиста
-                        tasksForTodoList = allTodoListTasks.filter ( t => !t.tasksHookISDONE) // если при фильтре у таски isDone = false, от пропустят таски только с false
+            
+            
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
+                        <Menu />
+                    </IconButton>
+                    <Typography variant="h6">
+                        News
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+            
+            
+            
+            <Container fixed>
+                
+                <Grid container style={{padding: '20px'}}>
+                    <AddNewItemComponent addNewItem={addNewTodoList}/>
+                </Grid>
+    
+                <Grid container spacing={3}>
+                    {
+                        todoListsHook.map((tl) => {
+                            
+                            let allTodoListTasks = tasksHook[tl.todoListsHookID]; /* берем все таски из 2 тудулистов */
+                            let tasksForTodoList = allTodoListTasks;
+                            if (tl.todoListsHookFILTER === 'Active') { // при нажатии кнопки active, фильтр сравниваем из тудулиста
+                                tasksForTodoList = allTodoListTasks.filter(t => !t.tasksHookISDONE) // если при фильтре у таски isDone = false, от пропустят таски только с false
+                            }
+                            if (tl.todoListsHookFILTER === 'Completed') { // при нажатии кнопки Completed, фильтр сравниваем из тудулиста
+                                tasksForTodoList = allTodoListTasks.filter(t => t.tasksHookISDONE) // если при фильтре у таски isDone = true, от пропустят таски только с true
+                            }
+                
+                            return (
+                                <Grid item>
+    
+                                    <Paper style={{padding: '10px'}}>
+                                        <TodoList
+                                            key={tl.todoListsHookID}
+                                            todoListsHookID={tl.todoListsHookID}
+                                            todoListsHookTITLE={tl.todoListsHookTITLE} // заголовки компоненты
+                                            tasks={tasksForTodoList}  // отфильтрованные таски по кнопкам
+                                            removeTask={removeTask} //  удаление таски
+                                            changeFilter={changeFilter} // юзабельность кнопок all active completed
+                                            addNewTask={addNewTask} // добавление новой таски
+                                            changeTaskStatus={changeTaskStatus} //передаем функцию, чтобы менять статус таске
+                                            changeTaskTitle={changeTaskTitle} //передаем функцию, чтобы менять статус таске
+                                            filterButton={tl.todoListsHookFILTER} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
+                                            removeTodoList={removeTodoList}
+                                            changeTodoListTitle={changeTodoListTitle}
+                                        />
+                                    </Paper>
+                                </Grid>
+                            )
+                        })
                     }
-                    if (tl.todoListsHookFILTER === 'Completed') { // при нажатии кнопки Completed, фильтр сравниваем из тудулиста
-                        tasksForTodoList = allTodoListTasks.filter ( t => t.tasksHookISDONE) // если при фильтре у таски isDone = true, от пропустят таски только с true
-                    }
-
-                    return (
-                        <TodoList
-                            key={tl.todoListsHookID}
-                            todoListsHookID={tl.todoListsHookID}
-                            todoListsHookTITLE={tl.todoListsHookTITLE} // заголовки компоненты
-                            tasks={tasksForTodoList}  // отфильтрованные таски по кнопкам
-                            removeTask={removeTask} //  удаление таски
-                            changeFilter={changeFilter} // юзабельность кнопок all active completed
-                            addNewTask={addNewTask} // добавление новой таски
-                            changeTaskStatus={changeTaskStatus} //передаем функцию, чтобы менять статус таске
-                            changeTaskTitle={changeTaskTitle} //передаем функцию, чтобы менять статус таске
-                            filterButton={tl.todoListsHookFILTER} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
-                            removeTodoList={removeTodoList}
-                            changeTodoListTitle={changeTodoListTitle}
-                        />
-                    )
-                })
-            }
+                </Grid>
+            </Container>
         </div>
     );
 }

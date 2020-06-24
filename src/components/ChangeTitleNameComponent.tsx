@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from "react";
+import { TextField } from "@material-ui/core";
 
 type ChangeTitleNamePropsType = {
     changeTitleValue: string
@@ -26,7 +27,7 @@ export function ChangeTitleNameComponent (props: ChangeTitleNamePropsType) {
 
     return (
         editModeHook
-            ? <input
+            ? <TextField
                 value={titleChangeNameHook}
                 onBlur={activateViewMode}
                 autoFocus

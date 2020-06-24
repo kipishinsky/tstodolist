@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import { IconButton, TextField} from '@material-ui/core';
+import { AddBox } from "@material-ui/icons";
 
 type AddNewItemPropsType = {
     addNewItem: (callBackFunction: string) => void
@@ -38,17 +40,19 @@ export function AddNewItemComponent (props: AddNewItemPropsType) {
     }
     return (
         <div>
-            <input //поле ввода
+            <TextField //поле ввода
+                variant={'outlined'}
+                error={!!errorItemListHook} // добавление подсветки ошибки
                 value={addNewItemListHook} // callback // получаем данные из поля ввода
                 onChange={onChangeHandler} // callback // onChange показывает и позволяет изменять значения поля ввода
                 onKeyPress={onKeyPressHandler} // callback // (onKeyPress - когда клавиша нажата. onKeyDown - когда клавиша нажата, но не отпущена. onKeyUp когда клавиша поднята. onKeyDown+onKeyUp = onKeyPress) при нажатии enter добавляем таску
-                className={errorItemListHook ? 'error' : ''}
+                label={'Title'}
+                helperText={errorItemListHook}
             />
-            <button
+            <IconButton // новые кнопки из библиотеки material ui
                 onClick={addNewItem} // добавление нового тудулиста
-            >+
-            </button>
-            {errorItemListHook && <div className={'error-message'}>{errorItemListHook}</div>}
+                color={'primary'}
+            > <AddBox /> </IconButton>
         </div>
     )
 }
