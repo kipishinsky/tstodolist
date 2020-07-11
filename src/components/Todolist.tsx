@@ -7,24 +7,24 @@ import {Delete} from '@material-ui/icons';
 
 // условия типов пропсов для тасок
 export type TLDTaskHookType = { //type какого типа будут таски, использующиеся в PropsType  Array<TaskType>
-    tasksHookID: string
-    tasksHookTITLE: string
-    tasksHookISDONE: boolean
+    tasksId: string
+    tasksTitle: string
+    tasksIsDone: boolean
 }
 
 // условия типов пропсов для функции тудулист
 type TLDPropsType = {
-    todoListsHookID: string
-    todoListsHookTITLE: string // в title можно писать только строку
+    todoListsId: string
+    todoListsTitle: string // в title можно писать только строку
     tasks: Array<TLDTaskHookType> // тип массив объектов // type TaskType
-    removeTask: (todoListsHookID: string, tasksHookID: string,) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
-    changeFilter: (filterValue: AppFilterValuesType, todoListsHookID: string) => void // в changeFilter можно указать только строку и точное название ("All" |(<- или) "Active" |(<- или) "Completed") или алл или актив или комплетед. ТС будет следить за правильностью написания данных
-    addNewTask: (tasksHookNewTITLEInput: string, tasksHookID: string) => void // функция которая принимает title string и ничего не возвращает
-    changeTaskStatus: (tasksHookID: string, tasksHookISDONE: boolean, todoListsHookID: string) => void // меняет галку таски
-    changeTaskTitle: (tasksHookID: string, taskTypeTitle: string, todoListsHookID: string) => void   // меняет название таски
+    removeTask: (todoListsId: string, tasksId: string,) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
+    changeFilter: (filterValue: AppFilterValuesType, todoListsId: string) => void // в changeFilter можно указать только строку и точное название ("All" |(<- или) "Active" |(<- или) "Completed") или алл или актив или комплетед. ТС будет следить за правильностью написания данных
+    addNewTask: (tasksHookNewTITLEInput: string, tasksId: string) => void // функция которая принимает title string и ничего не возвращает
+    changeTaskStatus: (tasksId: string, tasksIsDone: boolean, todoListsId: string) => void // меняет галку таски
+    changeTaskTitle: (tasksId: string, tasksTitle: string, todoListsId: string) => void   // меняет название таски
     filterButton: AppFilterValuesType // кнопки
-    removeTodoList: (todoListsHookID: string) => void  // удаление тудулиста
-    changeTodoListTitle: (todoListsHookID: string, newChangeTitleValue: string) => void  // меняет название тудулиста
+    removeTodoList: (todoListsId: string) => void  // удаление тудулиста
+    changeTodoListTitle: (todoListsId: string, newChangeTitleValue: string) => void  // меняет название тудулиста
 }
 
 
@@ -32,37 +32,37 @@ export function TodoList(props: TLDPropsType) { // props: any - что угод�
 
     // новое добавление таски
     const addNewTaskCallBack = (addNewItemPropsTitle: string) => {
-        props.addNewTask(addNewItemPropsTitle, props.todoListsHookID); //callback функция прыгает в пропсы
+        props.addNewTask(addNewItemPropsTitle, props.todoListsId); //callback функция прыгает в пропсы
     }
 
-    
+
 	// кнопка all отдает значение наверх и в APP уже меняется стейт
     const onAllClickHandlerCallBack = () => {
-        props.changeFilter('All', props.todoListsHookID)
+        props.changeFilter('All', props.todoListsId)
     }
 	
     
 	// кнопка Active отдает значение наверх и в APP уже меняется стейт
     const onActiveClickCallBack = () => {
-        props.changeFilter('Active', props.todoListsHookID)
+        props.changeFilter('Active', props.todoListsId)
     }
 	
     
 	// кнопка Completed отдает значение наверх и в APP уже меняется стейт
     const onCompletedClickCallBack = () => {
-        props.changeFilter('Completed', props.todoListsHookID)
+        props.changeFilter('Completed', props.todoListsId)
     }
 	
     
 	// удаление тудулистов
     const removeTodoListCallBack = () => {
-        props.removeTodoList(props.todoListsHookID)
+        props.removeTodoList(props.todoListsId)
     }
 	
     
 	// изменение названия тудулистов
     const changeTodoListTitleCallBack = (newChangeTitleValue: string) => {
-        props.changeTodoListTitle(props.todoListsHookID, newChangeTitleValue)
+        props.changeTodoListTitle(props.todoListsId, newChangeTitleValue)
     }
 
 
@@ -72,7 +72,7 @@ export function TodoList(props: TLDPropsType) { // props: any - что угод�
             
 				{/*меняет название заголовка тудулиста*/}
                 <ChangeTitleNameComponent
-                    changeTitleValue={props.todoListsHookTITLE}
+                    changeTitleValue={props.todoListsTitle}
                     onChange={changeTodoListTitleCallBack}
                 />
                 <IconButton onClick={removeTodoListCallBack}> {/*кнопки подключаемые из материал ui */}
@@ -93,28 +93,28 @@ export function TodoList(props: TLDPropsType) { // props: any - что угод�
                 {
                     props.tasks.map((t) => { // метод map на основе всех элементов создает новый массив с видоизменными элементами (другими объектами)
 
-                        const onClickHandler = () => props.removeTask(props.todoListsHookID, t.tasksHookID) //при нажатии кнопки удаляется таска. ВАЖНО функция removeTask вызывается и туда залетают параметры с id и улетает назад в колбеке
+                        const onClickHandler = () => props.removeTask(props.todoListsId, t.tasksId) //при нажатии кнопки удаляется таска. ВАЖНО функция removeTask вызывается и туда залетают параметры с id и улетает назад в колбеке
 	
 						// меняет галку таски
 						const onChangeStatus = (e: ChangeEvent<HTMLInputElement>) => {
 							let newIsDoneValue = e.currentTarget.checked;
-							props.changeTaskStatus(t.tasksHookID, newIsDoneValue, props.todoListsHookID);
+							props.changeTaskStatus(t.tasksId, newIsDoneValue, props.todoListsId);
 						}
 						// меняет название таски
 						const onChangeTitle = (newItemValue: string) => {
-							props.changeTaskTitle(t.tasksHookID, newItemValue, props.todoListsHookID);
+							props.changeTaskTitle(t.tasksId, newItemValue, props.todoListsId);
 						}
 
                         return (
-                            <li key={t.tasksHookID} className={t.tasksHookISDONE ? 'is-done' : ''}>
+                            <li key={t.tasksId} className={t.tasksIsDone ? 'is-done' : ''}>
 	
 								{/*подключенный checkbox из material ui*/}
                                 <Checkbox
                                     color={'primary'}
                                     onChange={onChangeStatus}
-                                    checked={t.tasksHookISDONE}/> {/*состояние галки*/}
+                                    checked={t.tasksIsDone}/> {/*состояние галки*/}
                                 <ChangeTitleNameComponent
-                                    changeTitleValue={t.tasksHookTITLE}
+                                    changeTitleValue={t.tasksTitle}
                                     onChange={onChangeTitle}
                                 />
                                 {/*добавили иконку удаления, с библиотеками
