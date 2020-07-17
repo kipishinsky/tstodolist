@@ -1,10 +1,18 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import './App.css';
 import {TasksType, TodoList} from "./components/Todolist";
 import {AddNewItemComponent} from "./components/AddNewItemComponent";
 import {v1} from 'uuid'; // генерит айдишки
 import {AppBar, Toolbar, IconButton, Typography, Button, Container, Grid, Paper} from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
+import {
+    addTodoListAC,
+    changeTodoTitleAC,
+    changeTodoListFilterAC,
+    removeTodolistAC,
+    todoListsReducer
+} from './state/todolists-reducer';
+import {addTasksAC, changeTasksAC, changeTitleTaskAC, removeTasksAC, tasksReducer} from './state/tasks-reducer';
 
 
 export type FilterValuesType = 'All' | 'Active' | 'Completed' ; // тип значения фильтров (пропсов) для кнопок
@@ -17,11 +25,11 @@ export type AppTasksType = {
     [key: string]: Array<TasksType>
 }
 
-function App() {
+function AppWithReducers() {
     
     let todoListId1 = v1(); let todoListId2 = v1();
     
-    let [todoLists, setTodoLists] = useState <Array<TodoListsType>> ([
+    let [todolists, dispatchTodolistsReducer] = useReducer ( todoListsReducer, [
         {
             todolistId: todoListId1,
             todolistTitle: 'What to learn',
@@ -33,11 +41,12 @@ function App() {
             todolistFilter: 'All'
         }
     ])
-    let [tasksHook, setTasksHook] = useState <AppTasksType> ({
+    
+    let [tasks, dispatchTasksReducer] = useReducer ( tasksReducer, {
         [todoListId1]: [
             { taskId: v1(), taskTitle: "HTML&CSS", taskIsDone: true},
             { taskId: v1(), taskTitle: "JS", taskIsDone: true},
-            { taskId: v1(), taskTitle: "React js", taskIsDone: false}, // sadasdasdas
+            { taskId: v1(), taskTitle: "React js", taskIsDone: false},
             { taskId: v1(), taskTitle: "TypeScript", taskIsDone: true},
             { taskId: v1(), taskTitle: "Rest API", taskIsDone: false},
             { taskId: v1(), taskTitle: "GraphQL", taskIsDone: false}
@@ -51,99 +60,55 @@ function App() {
     })
 
     // удаление таски по id
-    function removeTask (todoListsId: string, tasksId: string) {  /*
-    в параметры функции передаем ID удаляемой таски (эта таска лежит в определенном тудулисте,
-    поэтому указываем ID тудулиста, из которого удалили таску)
-    */
-        let newTasksHook = tasksHook[todoListsId]; /*
-         новый массив тасок хука [у которого лежат 2 новых массива тудулистов,
-         у которого лежат 2 новых массива тасок(без той таски, что удалили)]
-        */
-        tasksHook[todoListsId] = newTasksHook.filter (t => t.taskId !== tasksId);
-        setTasksHook({...tasksHook})
+    function removeTask (taskIdAC: string, todolistIdAC: string) {
+        debugger
+        dispatchTasksReducer(removeTasksAC (taskIdAC, todolistIdAC))
     }
     
     // добавление новой таски
-    /*
-        в параметры функции передаем newTitle который приходит из инпута,
-        плюс приходят массив id-шников.
-    */
-    function addNewTask (tasksNewTitleInput: string, tasksId: string) {
-        debugger
-        let newTodoListTasks = tasksHook[tasksId]; // достанем нужный массив по tasksHookID
-        let newTask = {taskId: v1(), taskTitle: tasksNewTitleInput, taskIsDone: false}; // перезапишем в этом объекте массив для нужного тудулиста копией,
-        tasksHook[tasksId] = [newTask, ...newTodoListTasks];
-        setTasksHook({...tasksHook})
+    function addNewTask(tasksNewTitleInput: string, todoListId: string) {
+        dispatchTasksReducer(addTasksAC(tasksNewTitleInput,  todoListId))
     }
     
     // change Status - изменить статус таски, изменить статус в isDone
-    function changeTaskStatus (tasksId: string, tasksIsDone: boolean, todoListsId: string) {
-        let newTodoListTasks = tasksHook[todoListsId];
-        let newTask = newTodoListTasks.find (t => t.taskId === tasksId)
-        if (newTask) {
-            newTask.taskIsDone = tasksIsDone;
-            setTasksHook ({...tasksHook})
-        }
+    function changeTaskStatus(tasksId: string, tasksIsDone: boolean, todoListsId: string) {
+        dispatchTasksReducer(changeTasksAC(tasksId, tasksIsDone, todoListsId))
     }
     
     // изменение названия таски
-    function changeTaskTitle (tasksId: string, tasksTitle: string, todoListsId: string) {
-        let newTodoListTasks = tasksHook[todoListsId];
-        let newTask = newTodoListTasks.find (t => t.taskId === tasksId)
-        if (newTask) {
-            newTask.taskTitle = tasksTitle;
-            setTasksHook ({...tasksHook})
-        }
+    function changeTaskTitle(tasksId: string, tasksTitle: string, todoListsId: string) {
+        dispatchTasksReducer(changeTitleTaskAC(tasksId, tasksTitle, todoListsId))
     }
     
     
     
     
     // меняем данные кнопок не хардкодом, а при нажатии (change Filter - изменить фильтр)
-    function changeFilterTodolist (filterValue: FilterValuesType, todoListsId: string) { /*
-            в функцию в параметры кладем FilterValuesType,
-    */
-        let newTodoList = todoLists.find ( tl => tl.todolistId === todoListsId);
-        if (newTodoList) {
-            newTodoList.todolistFilter = filterValue
-            setTodoLists ([...todoLists])
-        }
+    function changeFilterTodolist (filterValue: FilterValuesType, todoListsId: string) {
+        dispatchTodolistsReducer(changeTodoListFilterAC(todoListsId, filterValue))
     }
     
     // удаление тудулиста
     function removeTodoList (todoListsId: string) {
-        //засунем в стейт список тудулистов, id которых не равны тому, который нужно выкинуть
-        setTodoLists(todoLists.filter(tl => tl.todolistId != todoListsId));
-        // удалим таски дяля этого тудулиста из второго стейта, где мы храним отдельно таски
-        delete tasksHook[todoListsId]; // удаляем свойство из объекта, значение которого является массив тасок
-        setTasksHook({...tasksHook})
+        dispatchTodolistsReducer(removeTodolistAC(todoListsId))
+        dispatchTasksReducer(removeTodolistAC(todoListsId))
     }
     
     // редактирование тудулиста
     function changeTodoListTitle (todoListsId: string, newChangeTitleValue: string) {
-        const todoList = todoLists.find(tl => tl.todolistId === todoListsId);
-        if (todoList) {
-            todoList.todolistTitle = newChangeTitleValue;
-            setTodoLists([...todoLists])
-        }
+        dispatchTodolistsReducer(changeTodoTitleAC(todoListsId, newChangeTitleValue))
     }
 
     // добавление нового тудулиста
-    function addNewTodoList (newTodoListTitleInput: string) { //
-        let newTodoListId = v1() // присваиваем новый id
-        let newTodoList: TodoListsType = {todolistId: newTodoListId, todolistTitle: newTodoListTitleInput, todolistFilter: 'All'}
-        setTodoLists ([newTodoList, ...todoLists])
-        setTasksHook ({
-            ...tasksHook,
-            [newTodoListId]: []
-        })
+    function addNewTodoList (todolistTitleAC: string) {
+        const action = addTodoListAC(todolistTitleAC)
+        dispatchTodolistsReducer(action)
+        dispatchTasksReducer(action)
     }
     
     return (
         
         <div className={'App'}>
-            
-            
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -166,9 +131,9 @@ function App() {
     
                 <Grid container spacing={3}>
                     
-                    { todoLists.map((tl) => {
+                    { todolists.map( tl => {
                             
-                            let allTodoListTasks = tasksHook[tl.todolistId]; /* берем все таски из 2 тудулистов */
+                            let allTodoListTasks = tasks[tl.todolistId]; /* берем все таски из 2 тудулистов */
                             let tasksForTodoList = allTodoListTasks;
                             if (tl.todolistFilter === 'Active') { // при нажатии кнопки active, фильтр сравниваем из тудулиста
                                 tasksForTodoList = allTodoListTasks.filter(t => !t.taskIsDone) // если при фильтре у таски isDone = false, от пропустят таски только с false
@@ -206,6 +171,6 @@ function App() {
     );
 }
 
-export default App;
+export default AppWithReducers;
 
 
