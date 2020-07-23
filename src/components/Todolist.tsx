@@ -1,9 +1,10 @@
-import React, {ChangeEvent} from 'react';
-import {FilterValuesType} from "../App";
-import {AddNewItemComponent} from "./AddNewItemComponent";
-import {ChangeTitleNameComponent} from "./ChangeTitleNameComponent";
-import {Button, Checkbox, IconButton} from '@material-ui/core';
+import React, {useCallback} from 'react';
+import {FilterValuesType} from '../App';
+import {AddNewItemComponent} from './AddNewItemComponent';
+import {ChangeTitleNameComponent} from './ChangeTitleNameComponent';
+import {Button, IconButton} from '@material-ui/core';
 import {Delete} from '@material-ui/icons';
+import {Task} from './Task';
 
 // условия типов пропсов для тасок
 export type TasksType = { //type какого типа будут таски, использующиеся в PropsType  Array<TaskType>
@@ -29,30 +30,26 @@ type TodolistType = {
 }
 
 
-export function TodoList(props: TodolistType) { // props: any - что угодно, тоесть не задали четко тип, который будет отслеживаться
-
+export const TodoList = React.memo (function (props: TodolistType) { // props: any - что угодно, тоесть не задали четко тип, который будет отслеживаться
+    console.log('TodoList render')
     // новое добавление таски
-    const addNewTask = (title: string) => {
+    const addNewTask = useCallback((title: string) => {
         props.addNewTask(title, props.todolistId); //callback функция прыгает в пропсы
-    }
-
-
+    }, [props.addNewTask, props.todolistId]);
+    
+    
 	// кнопка all отдает значение наверх и в APP уже меняется стейт
-    const onAllClickHandlerCallBack = () => {
+    const onClickAllButton = useCallback (() => {
         props.changeFilter('All', props.todolistId)
-    }
-	
-    
+    }, [props.changeFilter, props.todolistId]);
 	// кнопка Active отдает значение наверх и в APP уже меняется стейт
-    const onActiveClickCallBack = () => {
+    const onClickActiveButton = useCallback (() => {
         props.changeFilter('Active', props.todolistId)
-    }
-	
-    
+    }, [props.changeFilter, props.todolistId]);
 	// кнопка Completed отдает значение наверх и в APP уже меняется стейт
-    const onCompletedClickCallBack = () => {
+    const onClickComletedButton = useCallback (() => {
         props.changeFilter('Completed', props.todolistId)
-    }
+    }, [props.changeFilter, props.todolistId]);
 	
     
 	// удаление тудулистов
@@ -62,11 +59,20 @@ export function TodoList(props: TodolistType) { // props: any - что угод�
 	
     
 	// изменение названия тудулистов
-    const changeTodoListTitleCallBack = (newChangeTitleValue: string) => {
+    const changeTodoListTitleCallBack = useCallback ((newChangeTitleValue: string) => {
         props.changeTodoListTitle(props.todolistId, newChangeTitleValue)
+    }, [props.changeTodoListTitle, props.todolistId])
+    
+    
+    let tasksForTodoList = props.tasks;
+    if (props.filterButton === 'Active') { // при нажатии кнопки active, фильтр сравниваем из тудулиста
+        tasksForTodoList = props.tasks.filter( t => !t.taskIsDone) // если при фильтре у таски isDone = false, от пропустят таски только с false
     }
-
-
+    if (props.filterButton === 'Completed') { // при нажатии кнопки Completed, фильтр сравниваем из тудулиста
+        tasksForTodoList = props.tasks.filter( t => t.taskIsDone) // если при фильтре у таски isDone = true, от пропустят таски только с true
+    }
+    
+    
     return (
         <div>
             <h3> {/*заголовки тасок*/}
@@ -92,59 +98,24 @@ export function TodoList(props: TodolistType) { // props: any - что угод�
             
             <ul>
                 {
-                    props.tasks.map((t) => {
-                        
-                        const onClickHandler = () => {
-                            /*debugger*/
-                            return props.removeTask( t.taskId, props.todolistId)
-                        } //при нажатии кнопки удаляется таска. ВАЖНО функция removeTask вызывается и туда залетают параметры с id и улетает назад в колбеке
-	
-						// меняет галку таски
-						const onChangeStatus = (e: ChangeEvent<HTMLInputElement>) => {
-							let newIsDoneValue = e.currentTarget.checked;
-							props.changeTaskStatus(t.taskId, newIsDoneValue, props.todolistId);
-						}
-						// меняет название таски
-						const onChangeTitle = (newItemValue: string) => {
-							props.changeTaskTitle(t.taskId, newItemValue, props.todolistId);
-						}
-
-                        return (
-                            <li key={t.taskId} className={t.taskIsDone ? 'is-done' : ''}>
-	
-								{/*подключенный checkbox из material ui*/}
-                                <Checkbox
-                                    color={'primary'}
-                                    onChange={onChangeStatus}
-                                    checked={t.taskIsDone}/> {/*состояние галки*/}
-                                <ChangeTitleNameComponent
-                                    changeTitleValue={t.taskTitle}
-                                    onChange={onChangeTitle}
-                                />
-                                {/*добавили иконку удаления, с библиотеками
-                                // with yarn
-                                yarn add @material-ui/core
-                                
-                                // with yarn
-                                yarn add @material-ui/icons
-                                */}
-                                <IconButton onClick={onClickHandler}>
-                                    <Delete/>
-                                </IconButton>
-                            </li>)
-
-                    })
+                    props.tasks.map((t) => <Task
+                        task={t}
+                        changeTaskStatus={props.changeTaskStatus}
+                        changeTaskTitle={props.changeTaskTitle}
+                        removeTask={props.removeTask}
+                        todolistId={props.todolistId}
+                        key={t.taskId}
+                    />)
                 }
             </ul>
             <div>
 				{/*подключенный Button из material ui*/}
-                <Button variant={props.filterButton === 'All' ? 'contained' : 'text'} onClick={onAllClickHandlerCallBack} color={'inherit'} >All</Button>
-                <Button variant={props.filterButton === 'Active' ? 'contained' : 'text'} onClick={onActiveClickCallBack} color={'primary'} >Active</Button>
-                <Button variant={props.filterButton === 'Completed' ? 'contained' : 'text'} onClick={onCompletedClickCallBack} color={'secondary'} >Completed</Button>
+                <Button variant={props.filterButton === 'All' ? 'contained' : 'text'} onClick={onClickAllButton} color={'inherit'} >All</Button>
+                <Button variant={props.filterButton === 'Active' ? 'contained' : 'text'} onClick={onClickActiveButton} color={'primary'} >Active</Button>
+                <Button variant={props.filterButton === 'Completed' ? 'contained' : 'text'} onClick={onClickComletedButton} color={'secondary'} >Completed</Button>
             </div>
         </div>
     )
-}
-
+})
 
 

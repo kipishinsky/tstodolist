@@ -6,8 +6,10 @@ type ChangeTitleNamePropsType = {
     onChange: (newItemValue: string) => void
 }
 
-export function ChangeTitleNameComponent (props: ChangeTitleNamePropsType) {
-
+export const ChangeTitleNameComponent = React.memo ( (props: ChangeTitleNamePropsType) => {
+    
+    console.log('ChangeTitleNameComponent render')
+    
     let [editModeHook, setEditModeHook] = useState(false);
     let [titleChangeNameHook, setTitleChangeNameHook] = useState('')
 
@@ -35,4 +37,4 @@ export function ChangeTitleNameComponent (props: ChangeTitleNamePropsType) {
             />
             : <span onDoubleClick={activateEditMode}>{props.changeTitleValue}</span>
     )
-}
+})

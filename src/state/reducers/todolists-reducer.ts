@@ -39,16 +39,7 @@ export let todoListId2 = v1();
 
 
 const initialState: Array<TodoListsType> = [
-	{
-		todolistId: todoListId1,
-		todolistTitle: 'What to learn',
-		todolistFilter: 'All'
-	},
-	{
-		todolistId: todoListId2,
-		todolistTitle: 'What to buy',
-		todolistFilter: 'All'
-	}
+
 ]
 
 

@@ -1,4 +1,4 @@
-import {addTasksAC, changeTasksAC, changeTitleTaskAC, removeTasksAC, tasksReducer} from './tasks-reducer';
+import {addTasksAC, changeStatusTaskAC, changeTitleTaskAC, removeTasksAC, tasksReducer} from './tasks-reducer';
 import {AppTasksType} from '../../AppWithReducers';
 import {addTodoListAC, removeTodolistAC} from './todolists-reducer';
 
@@ -67,7 +67,7 @@ test('status of specified task should be changed', () => {
 		]
 	};
 	
-	const action = changeTasksAC ("2", false, "todolistId2");
+	const action = changeStatusTaskAC ("2", false, "todolistId2");
 	
 	const endState = tasksReducer (startState, action)
 	

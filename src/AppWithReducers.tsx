@@ -12,7 +12,7 @@ import {
     removeTodolistAC,
     todoListsReducer
 } from './state/reducers/todolists-reducer';
-import {addTasksAC, changeTasksAC, changeTitleTaskAC, removeTasksAC, tasksReducer} from './state/reducers/tasks-reducer';
+import {addTasksAC, changeStatusTaskAC, changeTitleTaskAC, removeTasksAC, tasksReducer} from './state/reducers/tasks-reducer';
 
 
 export type FilterValuesType = 'All' | 'Active' | 'Completed' ; // тип значения фильтров (пропсов) для кнопок
@@ -72,7 +72,7 @@ function AppWithReducers() {
     
     // change Status - изменить статус таски, изменить статус в isDone
     function changeTaskStatus(tasksId: string, tasksIsDone: boolean, todoListsId: string) {
-        dispatchTasksReducer(changeTasksAC(tasksId, tasksIsDone, todoListsId))
+        dispatchTasksReducer(changeStatusTaskAC(tasksId, tasksIsDone, todoListsId))
     }
     
     // изменение названия таски

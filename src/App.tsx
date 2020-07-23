@@ -18,7 +18,7 @@ export type AppTasksType = {
 }
 
 function App() {
-    
+
     let todoListId1 = v1(); let todoListId2 = v1();
     
     let [todoLists, setTodoLists] = useState <Array<TodoListsType>> ([

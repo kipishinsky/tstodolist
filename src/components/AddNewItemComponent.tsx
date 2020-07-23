@@ -6,14 +6,14 @@ type AddNewItemPropsType = {
     addNewItem: (title: string) => void
 }
 
-export function AddNewItemComponent (props: AddNewItemPropsType) {
-
+export const AddNewItemComponent = React.memo ((props: AddNewItemPropsType) => {
+    console.log('AddNewItemComponent render')
     //стейт новых тасок.
     const [addNewTitle, setAddNewTitle] = useState('');
     const [error, setError] = useState<string | null>(null)
 
     // добавление нового тудулиста
-    const addNewItem = () => {
+    const addNewTask = () => {
         if (addNewTitle.trim() !== '') {
             props.addNewItem(addNewTitle);
             setAddNewTitle('');
@@ -33,9 +33,11 @@ export function AddNewItemComponent (props: AddNewItemPropsType) {
 
     // добавляем тудулист с ENTER
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => { //берем событие с клавиатуры из инпута  (e: KeyboardEvent<HTMLInputElement>) KeyboardEvent происходит с инпутом (HTMLInputElement)
-        setError(null);
+        if (error !== null){
+            setError(null);
+        }
         if (e.charCode === 13) { // charCode это значение кнопок клавы на машином языке, понять номер каждой клавиши можно на сайте https://keycode.info/. если нажатие клавиши на клаве ентер, то по чаркоду это 13, если это равно по типу 13 то добавь новую таску
-            addNewItem(); // добавь новый элемент
+            addNewTask(); // добавь новый элемент
         }
     }
     return (
@@ -50,9 +52,9 @@ export function AddNewItemComponent (props: AddNewItemPropsType) {
                 helperText={error}
             />
             <IconButton // новые кнопки из библиотеки material ui
-                onClick={addNewItem} // добавление нового тудулиста
+                onClick={addNewTask} // добавление нового тудулиста
                 color={'primary'}
             > <AddBox /> </IconButton>
         </div>
     )
-}
+} )
