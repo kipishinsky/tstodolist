@@ -1,4 +1,4 @@
-import React, {useCallback, useReducer} from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {TasksType, TodoList} from "./components/Todolist";
 import {AddNewItemComponent} from "./components/AddNewItemComponent";
@@ -10,7 +10,7 @@ import {
     changeTodoListFilterAC,
     removeTodolistAC,
 } from './state/reducers/todolists-reducer';
-import {addTasksAC, changeStatusTaskAC, changeTitleTaskAC, removeTasksAC, tasksReducer} from './state/reducers/tasks-reducer';
+import {addTasksAC, changeStatusTaskAC, changeTitleTaskAC, removeTasksAC} from './state/reducers/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootStateType} from './state/store';
 

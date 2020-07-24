@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {FilterValuesType} from '../App';
+import {FilterValuesType} from '../AppWithRedux';
 import {AddNewItemComponent} from './AddNewItemComponent';
 import {ChangeTitleNameComponent} from './ChangeTitleNameComponent';
 import {Button, IconButton} from '@material-ui/core';
