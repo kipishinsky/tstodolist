@@ -34,8 +34,8 @@ type ActionType =
 ;
 
 
-export let todoListId1 = v1();
-export let todoListId2 = v1();
+export let todolistId1 = v1();
+export let todolistId2 = v1();
 
 
 const initialState: Array<TodoListsType> = [

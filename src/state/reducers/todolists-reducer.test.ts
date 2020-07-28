@@ -11,7 +11,7 @@ import {
 	todoListsReducer
 } from './todolists-reducer';
 import {v1} from 'uuid';
-import {FilterValuesType, TodoListsType} from '../../AppWithReducers';
+import {FilterValuesType, TodoListsType} from '../../old app/AppWithReducers';
 
 test ('correct todoList should be removed', () => {
 	
