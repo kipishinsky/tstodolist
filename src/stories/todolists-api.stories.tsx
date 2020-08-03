@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
+import {todolistsAPI} from "../api/todolists-api";
 
 export default {
 	title: 'API'
@@ -12,21 +13,15 @@ const settings = {
 	}
 }
 
-
 export const GetTodolists = () => {
 
 	const [state, setState] = useState<any>(null)
 
 	useEffect(() => {
-		// здесь мы будем делать запрос и ответ закидывать в стейт.
-		// который в виде строки будем отображать в div-ке
 
-		axios.get("https://social-network.samuraijs.com/api/1.1/todo-lists", settings)
-			.then ( (res) => {
-			debugger
+		todolistsAPI.getTodolists().then ( (res) => {
 			setState(res.data)
 		})
-
 
 	}, [])
 
@@ -41,21 +36,15 @@ export const CreateTodolist = () => {
 	const [state, setState] = useState<any>(null)
 
 	useEffect(() => {
-		// здесь мы будем делать запрос и ответ закидывать в стейт.
-		// который в виде строки будем отображать в div-ке
-
-		axios.post("https://social-network.samuraijs.com/api/1.1/todo-lists", {title: 'pognali'}, settings)
+		todolistsAPI.createTodolists('nyyyyaaaakuy')
 			.then ( (res) => {
-				debugger
 				setState(res.data)
 			})
 
 	}, [])
 
 	return <div> {JSON.stringify(state)}</div>
-
-
-} // https://github.com/streamich/react-use
+}
 
 
 
@@ -64,14 +53,11 @@ export const DeleteTodolist = () => {
 	const [state, setState] = useState<any>(null)
 
 	useEffect(() => {
-		// здесь мы будем делать запрос и ответ закидывать в стейт.
-		// который в виде строки будем отображать в div-ке
-		axios.delete("https://social-network.samuraijs.com/api/1.1/todo-lists/88bc71ba-5d23-40fd-9e2d-9d495c2ee0e7", settings)
+
+		todolistsAPI.deleteTodolists('d4dbcaaf-f317-4207-ba3b-7138f44cd06d')
 			.then ( (res) => {
-				debugger
 				setState(res.data)
 			})
-
 
 	}, [])
 
@@ -86,20 +72,14 @@ export const UpdateTodolistTitle = () => {
 
 	const [state, setState] = useState<any>(null)
 
-
 	useEffect(() => {
-		// здесь мы будем делать запрос и ответ закидывать в стейт.
-		// который в виде строки будем отображать в div-ке
 
-		axios.put("https://social-network.samuraijs.com/api/1.1/todo-lists/901db4ed-bc2b-4702-978b-89e9e8b6904d", {title: 'priehali'}, settings)
+	todolistsAPI.updateTodolistsTitle('a4373257-ef40-47ee-80d2-72c2287b4851', 'new title run')
 			.then ( (res) => {
-				debugger
 				setState(res.data)
 			})
 
 	}, [])
 
-
 	return <div> {JSON.stringify(state)}</div>
-
 }
