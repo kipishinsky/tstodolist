@@ -20,3 +20,5 @@ module.exports = {
     }
   ],
 };
+
+// yarn run storybook // запуск сторибук
