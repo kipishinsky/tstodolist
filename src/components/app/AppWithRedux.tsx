@@ -1,41 +1,41 @@
 import React, {useCallback} from 'react';
 import './App.css';
-import {TasksType, TodoList} from "./components/Todolist";
-import {AddNewItemComponent} from "./components/AddNewItemComponent";
 import {AppBar, Toolbar, IconButton, Typography, Button, Container, Grid, Paper} from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
+import {useDispatch, useSelector} from 'react-redux';
+import {AddNewItemComponent} from "../add-new-item/AddNewItemComponent";
 import {
     addTodoListAC,
-    changeTodoTitleAC,
     changeTodoListFilterAC,
-    removeTodolistAC,
-} from './state/reducers/todolists-reducer';
-import {addTasksAC, changeStatusTaskAC, changeTitleTaskAC, removeTasksAC} from './state/reducers/tasks-reducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootStateType} from './state/store';
+    changeTodoTitleAC, FilterValuesType,
+    removeTodolistAC, TodolistsReducerType
+} from "../../state/reducers/todolists-reducer/todolists-reducer";
+import {
+    addTasksAC,
+    changeStatusTaskAC,
+    changeTitleTaskAC,
+    removeTasksAC
+} from "../../state/reducers/tasks-reducer/tasks-reducer";
+import {RootStateType} from "../../state/store";
+import {TaskStatuses, TaskType} from "../../api/tasks/tasks-api";
+import {TodoList} from "../todolists/Todolist";
 
 
-export type FilterValuesType = 'All' | 'Active' | 'Completed' ; // тип значения фильтров (пропсов) для кнопок
-export type TodoListsType = {
-    todolistId: string
-    todolistTitle: string
-    todolistFilter: FilterValuesType
-}
 export type AppTasksType = {
-    [key: string]: Array<TasksType>
+    [key: string]: Array<TaskType>
 }
 
 function AppWithRedux() {
     console.log('AppWithRedux render')
     
     const dispatch = useDispatch();
-    const todolists = useSelector <RootStateType, Array<TodoListsType>> (state => state.todolists )
+    const todolists = useSelector <RootStateType, Array<TodolistsReducerType>> (state => state.todolists )
     const tasks = useSelector <RootStateType, AppTasksType>( state => state.tasks)
     
 
     // удаление таски по id
-    const removeTask = useCallback ((taskIdAC: string, todolistIdAC: string) => {
-        dispatch(removeTasksAC (taskIdAC, todolistIdAC))
+    const removeTask = useCallback ((taskId: string, todolistId: string) => {
+        dispatch(removeTasksAC (taskId, todolistId))
     }, [dispatch]);
     
     // добавление новой таски
@@ -44,8 +44,8 @@ function AppWithRedux() {
     }, [dispatch]);
     
     // change Status - изменить статус таски, изменить статус в isDone
-    const changeTaskStatus = useCallback ((tasksId: string, tasksIsDone: boolean, todoListsId: string) => {
-        dispatch(changeStatusTaskAC(tasksId, tasksIsDone, todoListsId))
+    const changeTaskStatus = useCallback ((tasksId: string, status: TaskStatuses, todoListsId: string) => {
+        dispatch(changeStatusTaskAC(tasksId, status, todoListsId))
     }, [dispatch])
     
     // изменение названия таски
@@ -102,24 +102,30 @@ function AppWithRedux() {
                 <Grid container spacing={3}>
                     
                     { todolists.map( tl => {
-                            
-                        let AllTodolistTasks = tasks[tl.todolistId]; /* берем все таски из 2 тудулистов */
-                        let tasksForTodoList = AllTodolistTasks;
-                        
+
+                        let allTodolistTasks = tasks[tl.id];
+                        let tasksForTodoList = allTodolistTasks;
+
+                        if (tl.filter === "Active") {
+                            tasksForTodoList = allTodolistTasks.filter(t => t.status === TaskStatuses.New);
+                        }
+                        if (tl.filter === "Completed") {
+                            tasksForTodoList = allTodolistTasks.filter(t => t.status === TaskStatuses.Completed);
+                        }
                         return (
                             <Grid item>
                                 <Paper style={{padding: '10px'}}>
                                     <TodoList
-                                        key={tl.todolistId}
-                                        todolistId={tl.todolistId}
-                                        todolistTitle={tl.todolistTitle} // заголовки компоненты
+                                        key={tl.id}
+                                        todolistId={tl.id}
+                                        todolistTitle={tl.title} // заголовки компоненты
                                         tasks={tasksForTodoList}  // отфильтрованные таски по кнопкам
                                         removeTask={removeTask} //  удаление таски
                                         changeFilter={changeFilterTodolist} // юзабельность кнопок all active completed
                                         addNewTask={addNewTask} // добавление новой таски
                                         changeTaskStatus={changeTaskStatus} //передаем функцию, чтобы менять статус таске
                                         changeTaskTitle={changeTaskTitle} //передаем функцию, чтобы менять статус таске
-                                        filterButton={tl.todolistFilter} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
+                                        filterButton={tl.filter} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
                                         removeTodoList={removeTodoList}
                                         changeTodoListTitle={changeTodoListTitle}
                                     />

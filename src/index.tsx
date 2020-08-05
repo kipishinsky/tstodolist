@@ -4,7 +4,7 @@ import * as serviceWorker from './serviceWorker';
 
 import './index.css';
 
-import AppWithRedux from './AppWithRedux';
+import AppWithRedux from './components/app/AppWithRedux';
 import {Provider} from 'react-redux';
 import {store} from './state/store';
 

@@ -1,16 +1,8 @@
-import React, {useEffect, useState} from 'react'
-import axios from 'axios'
+import React, { useState} from 'react'
 import {tasksAPI} from "./tasks-api";
 
 export default {
 	title: 'API'
-}
-
-const settings = {
-	withCredentials: true,
-	headers: {
-		'API-KEY': 'b61c59bc-c21c-4a07-9ff4-5b299b2d5ced'
-	}
 }
 
 export const GetTasks = () => {
@@ -88,11 +80,11 @@ export const UpdateTaskTitle = () => {
 	const [state, setState] = useState<any>(null)
 	const [taskId, setTaskId] = useState<any>('')
 	const [todolistId, setTodolistId] = useState<any>('')
-	const [newTitle, setNewTitle] = useState<any> ('')
+	const [updateTitle, setUpdateTitle] = useState<any> ('')
 
-	const updateTitle = () => {
+	const newTitle = () => {
 
-		tasksAPI.updateTaskTitle(todolistId, taskId, newTitle)
+		tasksAPI.updateTaskTitle(todolistId, taskId, updateTitle)
 			.then ( (res) => {
 				setState(res.data)
 			})
@@ -102,8 +94,8 @@ export const UpdateTaskTitle = () => {
 		<div>
 			<input placeholder={'todolistId'} type="text" value={todolistId} onChange={ (e) => {setTodolistId(e.currentTarget.value)}}/>
 			<input placeholder={'taskId'} type="text"  value={taskId} onChange={ (e) => {setTaskId(e.currentTarget.value)}}/>
-			<input placeholder={'new title'} type="text" value={newTitle} onChange={ (e) => {setNewTitle(e.currentTarget.value)}} />
-			<button onClick={updateTitle}>update new title in task</button>
+			<input placeholder={'new title'} type="text" value={updateTitle} onChange={ (e) => {setUpdateTitle(e.currentTarget.value)}} />
+			<button onClick={newTitle}>update new title in task</button>
 		</div>
 	</div>
 }

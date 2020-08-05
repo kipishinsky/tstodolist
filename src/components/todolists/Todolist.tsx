@@ -1,28 +1,22 @@
 import React, {useCallback} from 'react';
-import {FilterValuesType} from '../AppWithRedux';
-import {AddNewItemComponent} from './AddNewItemComponent';
-import {ChangeTitleNameComponent} from './ChangeTitleNameComponent';
+import {AddNewItemComponent} from '../add-new-item/AddNewItemComponent';
+import {ChangeTitleNameComponent} from '../change-title-item/ChangeTitleNameComponent';
 import {Button, IconButton} from '@material-ui/core';
 import {Delete} from '@material-ui/icons';
-import {Task} from './Task';
-
-// условия типов пропсов для тасок
-export type TasksType = { //type какого типа будут таски, использующиеся в PropsType  Array<TaskType>
-    taskId: string
-    taskTitle: string
-    taskIsDone: boolean
-}
+import {Task} from '../tasks/Task';
+import {FilterValuesType} from "../../state/reducers/todolists-reducer/todolists-reducer";
+import {TaskStatuses, TaskType} from "../../api/tasks/tasks-api";
 
 // условия типов пропсов для функции тудулист
 type TodolistType = {
     todolistId: string
     todolistTitle: string // в title можно писать только строку
-    tasks: Array<TasksType> // тип массив объектов // type TaskType
+    tasks: Array<TaskType> // тип массив объектов // type TaskType
     removeTask: (todoListsId: string, tasksId: string,) => void // удаление тасок происходит только по id и типу string. принимает айдишник и ничего не возращает
     changeFilter: (filterValue: FilterValuesType, todoListsId: string) => void // в changeFilter можно указать только строку и точное название ("All" |(<- или) "Active" |(<- или) "Completed") или алл или актив или комплетед. ТС будет следить за правильностью написания данных
     addNewTask: (tasksNewTitleInput: string, todoListId: string) => void // функция которая принимает title string и ничего не возвращает
     // addNewTask: (tasksHookNewTITLEInput: string, tasksId: string) => void // функция которая принимает title string и ничего не возвращает
-    changeTaskStatus: (tasksId: string, tasksIsDone: boolean, todoListsId: string) => void // меняет галку таски
+    changeTaskStatus: (tasksId: string, status: TaskStatuses, todoListsId: string) => void // меняет галку таски
     changeTaskTitle: (tasksId: string, tasksTitle: string, todoListsId: string) => void   // меняет название таски
     filterButton: FilterValuesType // кнопки
     removeTodoList: (todoListsId: string) => void  // удаление тудулиста
@@ -66,10 +60,10 @@ export const TodoList = React.memo (function (props: TodolistType) { // props: a
     
     let tasksForTodoList = props.tasks;
     if (props.filterButton === 'Active') { // при нажатии кнопки active, фильтр сравниваем из тудулиста
-        tasksForTodoList = props.tasks.filter( t => !t.taskIsDone) // если при фильтре у таски isDone = false, от пропустят таски только с false
+        tasksForTodoList = props.tasks.filter( t => t.status === TaskStatuses.New) // если при фильтре у таски isDone = false, от пропустят таски только с false
     }
     if (props.filterButton === 'Completed') { // при нажатии кнопки Completed, фильтр сравниваем из тудулиста
-        tasksForTodoList = props.tasks.filter( t => t.taskIsDone) // если при фильтре у таски isDone = true, от пропустят таски только с true
+        tasksForTodoList = props.tasks.filter( t => t.status === TaskStatuses.Completed) // если при фильтре у таски isDone = true, от пропустят таски только с true
     }
     
     
@@ -104,7 +98,7 @@ export const TodoList = React.memo (function (props: TodolistType) { // props: a
                         changeTaskTitle={props.changeTaskTitle}
                         removeTask={props.removeTask}
                         todolistId={props.todolistId}
-                        key={t.taskId}
+                        key={t.id}
                     />)
                 }
             </ul>

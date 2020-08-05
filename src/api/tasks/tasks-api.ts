@@ -13,16 +13,31 @@ const instance = axios.create({
 	...settings
 })
 
+export enum TaskStatuses {
+	New = 0,
+	InProgress = 1,
+	Completed = 2,
+	Draft = 3
+}
+
+export enum TaskPriorities {
+	Low = 0,
+	Middle = 1,
+	High = 2,
+	Urgent = 3,
+	Later = 4
+}
+
 export type TaskType = {
-	description: string
-	title: string
-	completed: boolean
-	status: number
-	priority: number
-	startDate: string
-	deadline: string
 	id: string
 	todoListId: string
+	title: string
+	status: TaskStatuses
+	priority: TaskPriorities
+	completed: boolean
+	description: string
+	startDate: string
+	deadline: string
 	order: number
 	addedDate: string
 }
@@ -34,18 +49,20 @@ type ResponseTasksType<D={}> = {
 	item: TaskType [] // Array<TaskType>
 }
 
+
+
 export const tasksAPI = {
 
 	getTasks(todolistId: string){
 		return instance.get < ResponseTasksType > (`todo-lists/${todolistId}/tasks`)
 	},
-	createTask(todolistId: string, title: string) {
-		return instance.post < ResponseTasksType > (`todo-lists/${todolistId}/tasks`, {title: title})
+	createTask(todolistId: string, newTitle: string) {
+		return instance.post < ResponseTasksType > (`todo-lists/${todolistId}/tasks`, {title: newTitle})
 	},
 	deleteTask(todolistId: string, taskId: string) {
 		return instance.delete < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`)
 	},
-	updateTaskTitle(todolistId: string, taskId: string, title: string) {
-		return instance.put < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`, {title: title})
+	updateTaskTitle(todolistId: string, taskId: string, updateTitleTask: string) {
+		return instance.put < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`, {title: updateTitleTask})
 	}
 }

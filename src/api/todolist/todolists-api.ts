@@ -1,4 +1,5 @@
 import axios from "axios";
+import {FilterValuesType} from "../../state/reducers/todolists-reducer/todolists-reducer";
 
 
 const settings = {
@@ -14,13 +15,14 @@ const instance = axios.create({
 })
 
 export type TodolistType = {
-	todolistId: string
+	id: string
 	title: string
+	filter: FilterValuesType
 	addedDate: string
 	order: number
 }
 
-type ResponseType<D={}> = {
+type ResponseTodolistType<D={}> = {
 	resultCode: number
 	messages: Array<string>
 	data: D
@@ -32,13 +34,13 @@ export const todolistsAPI = {
 	getTodolists(){
 		return instance.get <Array <TodolistType> >(`todo-lists`)
 	},
-	createTodolists(title: string) {
-		return instance.post < ResponseType <{item: TodolistType}> >  (`todo-lists`, {title: title})
+	createTodolists(newTodolistTitle: string) {
+		return instance.post < ResponseTodolistType <{item: TodolistType}> >  (`todo-lists`, {title: newTodolistTitle})
 	},
 	deleteTodolists(todolistId: string) {
-		return instance.delete< ResponseType >(`todo-lists/${todolistId}`)
+		return instance.delete< ResponseTodolistType >(`todo-lists/${todolistId}`)
 	},
-	updateTodolistsTitle(todolistId: string, title: string) {
-		return instance.put< ResponseType >(`todo-lists/${todolistId}`, {title: title})
+	updateTodolistsTitle(todolistId: string, updateTitle: string) {
+		return instance.put< ResponseTodolistType >(`todo-lists/${todolistId}`, {title: updateTitle})
 	}
 }
