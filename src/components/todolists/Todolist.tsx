@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {AddNewItemComponent} from '../add-new-item/AddNewItemComponent';
 import {ChangeTitleNameComponent} from '../change-title-item/ChangeTitleNameComponent';
 import {Button, IconButton} from '@material-ui/core';
@@ -6,6 +6,8 @@ import {Delete} from '@material-ui/icons';
 import {Task} from '../tasks/Task';
 import {FilterValuesType} from "../../state/reducers/todolists-reducer/todolists-reducer";
 import {TaskStatuses, TaskType} from "../../api/tasks/tasks-api";
+import {fetchTasksThunkCreator} from "../../state/reducers/tasks-reducer/tasks-reducer";
+import {useDispatch} from "react-redux";
 
 // условия типов пропсов для функции тудулист
 type TodolistType = {
@@ -26,12 +28,21 @@ type TodolistType = {
 
 export const TodoList = React.memo (function (props: TodolistType) { // props: any - что угодно, тоесть не задали четко тип, который будет отслеживаться
     console.log('TodoList render')
+
+    const dispatch = useDispatch()
+
+    useEffect( () => {
+        console.log('log' + props.todolistId)
+        dispatch(fetchTasksThunkCreator(props.todolistId))
+    })
+
+
     // новое добавление таски
     const addNewTask = useCallback((title: string) => {
         props.addNewTask(title, props.todolistId); //callback функция прыгает в пропсы
     }, [props.addNewTask, props.todolistId]);
-    
-    
+
+
 	// кнопка all отдает значение наверх и в APP уже меняется стейт
     const onClickAllButton = useCallback (() => {
         props.changeFilter('All', props.todolistId)
@@ -50,8 +61,7 @@ export const TodoList = React.memo (function (props: TodolistType) { // props: a
     const removeTodoListCallBack = () => {
         props.removeTodoList(props.todolistId)
     }
-	
-    
+
 	// изменение названия тудулистов
     const changeTodoListTitleCallBack = useCallback ((newChangeTitleValue: string) => {
         props.changeTodoListTitle(props.todolistId, newChangeTitleValue)

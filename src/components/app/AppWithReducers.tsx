@@ -11,9 +11,9 @@ import {
     tasksReducer
 } from "../../state/reducers/tasks-reducer/tasks-reducer";
 import {
-    addTodoListAC,
+    addTodolistAC,
     changeTodoListFilterAC, changeTodoTitleAC,
-    FilterValuesType, removeTodolistAC, todoListsReducer,
+    FilterValuesType, removeTodolistAC, todolistsReducer,
 
 } from "../../state/reducers/todolists-reducer/todolists-reducer";
 import {AddNewItemComponent} from "../add-new-item/AddNewItemComponent";
@@ -30,7 +30,7 @@ function AppWithReducers() {
     let todolistId1 = v1();
     let todolistId2 = v1();
 
-    let [todolists, dispatchToTodolists] = useReducer(todoListsReducer, [
+    let [todolists, dispatchToTodolists] = useReducer(todolistsReducer, [
         {
             id: todolistId1,
             title: "What to learn",
@@ -135,8 +135,8 @@ function AppWithReducers() {
     }
 
     function addNewTodoList(todolistTitleAC: string) {
-        dispatchToTasks(addTodoListAC(todolistTitleAC));
-        dispatchToTodolists(addTodoListAC(todolistTitleAC));
+        dispatchToTasks(addTodolistAC(todolistTitleAC));
+        dispatchToTodolists(addTodolistAC(todolistTitleAC));
     }
 
     return (
