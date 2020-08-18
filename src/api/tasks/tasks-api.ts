@@ -53,13 +53,15 @@ type ResponseTasksType<D={}> = {
 
 export const tasksAPI = {
 
-	getTasks(todolistId: string){
+	getTasks(todolistId: string) {
 		return instance.get < ResponseTasksType > (`todo-lists/${todolistId}/tasks`)
 	},
-	createTask(todolistId: string, newTitle: string) {
-		return instance.post < ResponseTasksType > (`todo-lists/${todolistId}/tasks`, {title: newTitle})
+	createTask(newTitle: string, todolistId: string) {
+		debugger
+		return instance.post < ResponseTasksType<{item:TaskType}> > (`todo-lists/${todolistId}/tasks`, {title: newTitle})
 	},
-	deleteTask(todolistId: string, taskId: string) {
+	deleteTask(taskId: string, todolistId: string ) {
+		debugger
 		return instance.delete < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`)
 	},
 	updateTaskTitle(todolistId: string, taskId: string, updateTitleTask: string) {

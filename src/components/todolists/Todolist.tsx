@@ -6,7 +6,7 @@ import {Delete} from '@material-ui/icons';
 import {Task} from '../tasks/Task';
 import {FilterValuesType} from "../../state/reducers/todolists-reducer/todolists-reducer";
 import {TaskStatuses, TaskType} from "../../api/tasks/tasks-api";
-import {fetchTasksThunkCreator} from "../../state/reducers/tasks-reducer/tasks-reducer";
+import {getTasksThunkCreator} from "../../state/reducers/tasks-reducer/tasks-reducer";
 import {useDispatch} from "react-redux";
 
 // условия типов пропсов для функции тудулист
@@ -27,14 +27,14 @@ type TodolistType = {
 
 
 export const TodoList = React.memo (function (props: TodolistType) { // props: any - что угодно, тоесть не задали четко тип, который будет отслеживаться
-    console.log('TodoList render')
+    console.log(' TodoList render')
 
     const dispatch = useDispatch()
 
     useEffect( () => {
-        console.log('log' + props.todolistId)
-        dispatch(fetchTasksThunkCreator(props.todolistId))
-    })
+        console.log('log  ' + props.todolistId)
+        dispatch(getTasksThunkCreator(props.todolistId))
+    },[])
 
 
     // новое добавление таски
@@ -75,42 +75,31 @@ export const TodoList = React.memo (function (props: TodolistType) { // props: a
     if (props.filterButton === 'Completed') { // при нажатии кнопки Completed, фильтр сравниваем из тудулиста
         tasksForTodoList = props.tasks.filter( t => t.status === TaskStatuses.Completed) // если при фильтре у таски isDone = true, от пропустят таски только с true
     }
-    
-    
+
     return (
         <div>
             <h3> {/*заголовки тасок*/}
-            
-				{/*меняет название заголовка тудулиста*/}
                 <ChangeTitleNameComponent
                     changeTitleValue={props.todolistTitle}
                     onChange={changeTodoListTitleCallBack}
                 />
-                <IconButton onClick={removeTodoListCallBack}> {/*кнопки подключаемые из материал ui */}
-                    <Delete /> {/*кнопки подключаемые из материал ui */}
+                <IconButton onClick={removeTodoListCallBack}>
+                    <Delete />
                 </IconButton>
             </h3>
-            {/*добавили иконку удаления, с библиотеками
-            // with yarn
-            yarn add @material-ui/core
-            
-            // with yarn
-            yarn add @material-ui/icons
-            */}
             
             <AddNewItemComponent addNewItem={addNewTask}/> {/* добавление новой таски */}
             
             <ul>
-                {
-                    props.tasks.map((t) => <Task
+
+                {   props.tasks.map ( (t) => <Task
                         task={t}
                         changeTaskStatus={props.changeTaskStatus}
                         changeTaskTitle={props.changeTaskTitle}
                         removeTask={props.removeTask}
                         todolistId={props.todolistId}
                         key={t.id}
-                    />)
-                }
+                    />)     }
             </ul>
             <div>
 				{/*подключенный Button из material ui*/}

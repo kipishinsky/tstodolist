@@ -1,4 +1,4 @@
-import React, {useReducer, useState} from 'react';
+import React, {useReducer} from 'react';
 import './App.css';
 import {v1} from 'uuid';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
@@ -109,8 +109,20 @@ function AppWithReducers() {
         dispatchToTasks(removeTasksAC(taskId, todolistId))
     }
 
-    function addNewTask(tasksNewTitleInput: string, todoListId: string) {
-        dispatchToTasks(addTasksAC(tasksNewTitleInput,  todoListId));
+    function addNewTask(newTitle: string, todolistId: string) {
+        dispatchToTasks(addTasksAC({
+            id: "4",
+            title: newTitle,
+            status: TaskStatuses.New,
+            todoListId: todolistId,
+            priority: TaskPriorities.Low,
+            completed: false,
+            description: '',
+            startDate: '',
+            deadline: '',
+            order: 0,
+            addedDate: ''
+        }));
     }
 
     function changeTaskStatus(tasksId: string, status: TaskStatuses, todoListsId: string) {
@@ -134,9 +146,21 @@ function AppWithReducers() {
         dispatchToTodolists(changeTodoTitleAC(todoListsId, newChangeTitleValue));
     }
 
-    function addNewTodoList(todolistTitleAC: string) {
-        dispatchToTasks(addTodolistAC(todolistTitleAC));
-        dispatchToTodolists(addTodolistAC(todolistTitleAC));
+    function addNewTodoList(title: string) {
+        dispatchToTasks(addTodolistAC({
+            id: v1(),
+            title: title,
+            filter: 'All',
+            addedDate: '',
+            order: 0
+        }));
+        dispatchToTodolists(addTodolistAC({
+            id: v1(),
+            title: title,
+            filter: 'All',
+            addedDate: '',
+            order: 0
+        }));
     }
 
     return (

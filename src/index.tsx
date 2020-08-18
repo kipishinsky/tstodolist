@@ -4,9 +4,11 @@ import * as serviceWorker from './serviceWorker';
 
 import './index.css';
 
-import AppWithRedux from './components/app/AppWithRedux';
+
 import {Provider} from 'react-redux';
 import {store} from './state/store';
+import AppWithReducers from "./components/app/AppWithReducers";
+import AppWithRedux from './components/app/AppWithRedux';
 
 
 ReactDOM.render(

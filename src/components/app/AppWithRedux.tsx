@@ -5,16 +5,16 @@ import {Menu} from '@material-ui/icons'
 import {useDispatch, useSelector} from 'react-redux'
 import {AddNewItemComponent} from '../add-new-item/AddNewItemComponent'
 import {
-	addTodolistAC,
+	addTodolistsTC,
 	changeTodoListFilterAC,
-	changeTodoTitleAC, fetchTodolistsThunkCreator, FilterValuesType,
-	removeTodolistAC, TodolistsReducerType
+	changeTodoTitleTC, fetchTodolistsThunkCreator, FilterValuesType,
+	removeTodolistsTC, TodolistsReducerType
 } from '../../state/reducers/todolists-reducer/todolists-reducer'
 import {
-	addTasksAC,
+	addTasksTC,
 	changeStatusTaskAC,
 	changeTitleTaskAC,
-	removeTasksAC
+	removeTaskTC
 } from '../../state/reducers/tasks-reducer/tasks-reducer'
 import {RootStateType} from '../../state/store'
 import {TaskStatuses, TaskType} from '../../api/tasks/tasks-api'
@@ -37,45 +37,46 @@ function AppWithRedux() {
 
 
 	// удаление таски по id
+
 	const removeTask = useCallback((taskId: string, todolistId: string) => {
-		dispatch(removeTasksAC(taskId, todolistId))
-	}, [dispatch])
+		dispatch(removeTaskTC(taskId, todolistId))
+	}, [])
 
 	// добавление новой таски
 	const addNewTask = useCallback((tasksNewTitleInput: string, todoListId: string) => {
-		dispatch(addTasksAC(tasksNewTitleInput, todoListId))
-	}, [dispatch])
+		dispatch(addTasksTC(tasksNewTitleInput, todoListId))
+	}, [])
 
 	// change Status - изменить статус таски, изменить статус в isDone
 	const changeTaskStatus = useCallback((tasksId: string, status: TaskStatuses, todoListsId: string) => {
 		dispatch(changeStatusTaskAC(tasksId, status, todoListsId))
-	}, [dispatch])
+	}, [])
 
 	// изменение названия таски
 	const changeTaskTitle = useCallback((tasksId: string, tasksTitle: string, todoListsId: string) => {
 		dispatch(changeTitleTaskAC(tasksId, tasksTitle, todoListsId))
-	}, [dispatch])
+	}, [])
 
 
 	// меняем данные кнопок не хардкодом, а при нажатии (change Filter - изменить фильтр)
 	const changeFilterTodolist = useCallback((filterValue: FilterValuesType, todoListsId: string) => {
 		dispatch(changeTodoListFilterAC(todoListsId, filterValue))
-	}, [dispatch])
+	}, [])
 
 	// удаление тудулиста
 	const removeTodoList = useCallback((todoListsId: string) => {
-		dispatch(removeTodolistAC(todoListsId))
-	}, [dispatch])
+		dispatch(removeTodolistsTC(todoListsId))
+	}, [])
 
 	// редактирование тудулиста
 	const changeTodoListTitle = useCallback((todoListsId: string, newChangeTitleValue: string) => {
-		dispatch(changeTodoTitleAC(todoListsId, newChangeTitleValue))
-	}, [dispatch])
+		dispatch(changeTodoTitleTC(todoListsId, newChangeTitleValue))
+	}, [])
 
 	// добавление нового тудулиста
-	const addNewTodoList = useCallback((todolistTitleAC: string) => {
-		dispatch(addTodolistAC(todolistTitleAC))
-	}, [dispatch])
+	const addNewTodoList = useCallback((title: string) => {
+		dispatch(addTodolistsTC(title))
+	}, [])
 
 
 	return (
@@ -102,7 +103,7 @@ function AppWithRedux() {
 
 				<Grid container spacing={3}>
 
-					{todolists.map(tl => {
+					{todolists.map( tl => {
 
 						let allTodolistTasks = tasks[tl.id];
 						let tasksForTodoList = allTodolistTasks;
