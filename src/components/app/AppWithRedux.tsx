@@ -1,21 +1,19 @@
 import React, {useCallback, useEffect} from 'react'
 import './App.css';
-import {AppBar, Toolbar, IconButton, Typography, Button, Container, Grid, Paper} from '@material-ui/core';
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
 import {Menu} from '@material-ui/icons'
 import {useDispatch, useSelector} from 'react-redux'
 import {AddNewItemComponent} from '../add-new-item/AddNewItemComponent'
 import {
 	addTodolistsTC,
 	changeTodoListFilterAC,
-	changeTodoTitleTC, fetchTodolistsThunkCreator, FilterValuesType,
-	removeTodolistsTC, TodolistsReducerType
+	changeTodoTitleTC,
+	fetchTodolistsThunkCreator,
+	FilterValuesType,
+	removeTodolistsTC,
+	TodolistsReducerType
 } from '../../state/reducers/todolists-reducer/todolists-reducer'
-import {
-	addTasksTC,
-	changeStatusTaskAC,
-	changeTitleTaskAC,
-	removeTaskTC
-} from '../../state/reducers/tasks-reducer/tasks-reducer'
+import {addTasksTC, changeTaskStatusTC, removeTaskTC} from '../../state/reducers/tasks-reducer/tasks-reducer'
 import {RootStateType} from '../../state/store'
 import {TaskStatuses, TaskType} from '../../api/tasks/tasks-api'
 import {TodoList} from '../todolists/Todolist'
@@ -49,12 +47,12 @@ function AppWithRedux() {
 
 	// change Status - изменить статус таски, изменить статус в isDone
 	const changeTaskStatus = useCallback((tasksId: string, status: TaskStatuses, todoListsId: string) => {
-		dispatch(changeStatusTaskAC(tasksId, status, todoListsId))
+		dispatch(changeTaskStatusTC(tasksId, {status}, todoListsId))
 	}, [])
 
 	// изменение названия таски
 	const changeTaskTitle = useCallback((tasksId: string, tasksTitle: string, todoListsId: string) => {
-		dispatch(changeTitleTaskAC(tasksId, tasksTitle, todoListsId))
+		dispatch(changeTaskStatusTC(tasksId, {title: tasksTitle}, todoListsId))
 	}, [])
 
 

@@ -6,9 +6,9 @@ import {Menu} from '@material-ui/icons';
 import {TaskPriorities, TaskStatuses, TaskType} from "../../api/tasks/tasks-api";
 import {
     addTasksAC,
-    changeStatusTaskAC, changeTitleTaskAC,
+    updateTaskAC, changeTitleTaskAC,
     removeTasksAC,
-    tasksReducer
+    tasksReducer, UpdateDomainTaskType
 } from "../../state/reducers/tasks-reducer/tasks-reducer";
 import {
     addTodolistAC,
@@ -126,11 +126,11 @@ function AppWithReducers() {
     }
 
     function changeTaskStatus(tasksId: string, status: TaskStatuses, todoListsId: string) {
-        dispatchToTasks(changeStatusTaskAC(tasksId, status, todoListsId));
+        dispatchToTasks(updateTaskAC(tasksId, {status}, todoListsId));
     }
 
     function changeTaskTitle(tasksId: string, tasksTitle: string, todoListsId: string) {
-        dispatchToTasks(changeTitleTaskAC(tasksId, tasksTitle, todoListsId));
+        dispatchToTasks(updateTaskAC(tasksId, {title: tasksTitle}, todoListsId));
     }
 
     function changeFilterTodolist(filterValue: FilterValuesType, todoListsId: string) {

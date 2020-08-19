@@ -42,6 +42,15 @@ export type TaskType = {
 	addedDate: string
 }
 
+export type UpdateTaskModelType = {
+	title: string,
+	description: string,
+	status: TaskStatuses,
+	priority: TaskPriorities,
+	startDate: string,
+	deadline: string
+}
+
 type ResponseTasksType<D={}> = {
 	error: string | null
 	totalCount: number
@@ -57,14 +66,12 @@ export const tasksAPI = {
 		return instance.get < ResponseTasksType > (`todo-lists/${todolistId}/tasks`)
 	},
 	createTask(newTitle: string, todolistId: string) {
-		debugger
 		return instance.post < ResponseTasksType<{item:TaskType}> > (`todo-lists/${todolistId}/tasks`, {title: newTitle})
 	},
 	deleteTask(taskId: string, todolistId: string ) {
-		debugger
 		return instance.delete < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`)
 	},
-	updateTaskTitle(todolistId: string, taskId: string, updateTitleTask: string) {
-		return instance.put < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`, {title: updateTitleTask})
+	updateTaskTitle(taskId: string, status: UpdateTaskModelType, todolistId: string,) {
+		return instance.put < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`, {title: status})
 	}
 }
