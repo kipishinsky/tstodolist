@@ -7,7 +7,7 @@ import {
 	tasksReducer
 } from './tasks-reducer'
 
-import {addTodolistAC, removeTodolistAC, setTodolistsAC} from '../todolists-reducer/todolists-reducer'
+import {addTodolistAC, FilterValuesType, removeTodolistAC, setTodolistsAC} from '../todolists-reducer/todolists-reducer'
 import {AppTasksType} from '../../../components/app/AppWithRedux'
 import {TaskPriorities, TaskStatuses} from '../../../api/tasks/tasks-api'
 
@@ -303,7 +303,7 @@ test('status of specified task should be changed', () => {
 		]
 	}
 
-	const action = updateTaskAC("2", TaskStatuses.New, "todolistId2")
+	const action = updateTaskAC("2", {status: TaskStatuses.New},"todolistId2")
 
 	const endState = tasksReducer(startState, action)
 
@@ -497,7 +497,13 @@ test('new array should be added when new todolist is added', () => {
 	}
 
 
-	const action = addTodolistAC('new todolist')
+	const action = addTodolistAC({
+		id: '1',
+		title: 'new todolist',
+		filter: 'All',
+		addedDate: '',
+		order: 0
+	})
 	const endState = tasksReducer(startState, action)
 
 
