@@ -1,6 +1,5 @@
 import axios from "axios";
-import {FilterValuesType} from "../../state/reducers/todolists-reducer/todolists-reducer";
-
+import {FilterValuesType} from "../../components/todolists-lists/todolist/todolists-reducer/todolists-reducer";
 
 const settings = {
 	withCredentials: true,
@@ -8,27 +7,12 @@ const settings = {
 		'API-KEY': 'b61c59bc-c21c-4a07-9ff4-5b299b2d5ced'
 	}
 }
-
 const instance = axios.create({
 	baseURL: 'https://social-network.samuraijs.com/api/1.1/',
 	...settings
 })
 
-export type TodolistType = {
-	id: string
-	title: string
-	filter: FilterValuesType
-	addedDate: string
-	order: number
-}
-
-type ResponseTodolistType<D={}> = {
-	resultCode: number
-	messages: Array<string>
-	data: D
-}
-
-
+//api
 export const todolistsAPI = {
 
 	getTodolists(){
@@ -43,4 +27,18 @@ export const todolistsAPI = {
 	updateTodolistsTitle(todolistId: string, updateTitle: string) {
 		return instance.put< ResponseTodolistType >(`todo-lists/${todolistId}`, {title: updateTitle})
 	}
+}
+
+//types
+export type TodolistType = {
+	id: string
+	title: string
+	filter: FilterValuesType
+	addedDate: string
+	order: number
+}
+type ResponseTodolistType<D={}> = {
+	resultCode: number
+	messages: Array<string>
+	data: D
 }

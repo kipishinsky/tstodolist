@@ -1,10 +1,10 @@
 import React from 'react'
 import {Provider} from 'react-redux'
 import {combineReducers, createStore} from 'redux'
-import {tasksReducer} from '../../state/reducers/tasks-reducer/tasks-reducer'
-import {todolistsReducer} from '../../state/reducers/todolists-reducer/todolists-reducer'
+import {tasksReducer} from '../../components/todolists-lists/todolist/tasks-reducer/tasks-reducer'
+import {todolistsReducer} from '../../components/todolists-lists/todolist/todolists-reducer/todolists-reducer'
 import {v1} from 'uuid'
-import {RootStateType, store} from "../../state/store";
+import {RootStateType, store} from "../../components/app/store";
 import {TaskPriorities, TaskStatuses} from "../../api/tasks/tasks-api";
 
 

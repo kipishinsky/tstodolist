@@ -8,8 +8,8 @@ import {
 } from './tasks-reducer'
 
 import {addTodolistAC, FilterValuesType, removeTodolistAC, setTodolistsAC} from '../todolists-reducer/todolists-reducer'
-import {AppTasksType} from '../../../components/app/AppWithRedux'
-import {TaskPriorities, TaskStatuses} from '../../../api/tasks/tasks-api'
+import {AppTasksType} from '../../../app/App'
+import {TaskPriorities, TaskStatuses} from '../../../../api/tasks/tasks-api'
 
 test('correct task should be deleted from correct array', () => {
 	const startState: AppTasksType = {
@@ -616,7 +616,7 @@ test('property with todolistId should be deleted', () => {
 })
 
 
-test('empty arrays should be added when we set todolists', () => {
+test('empty arrays should be added when we set todolists-lists', () => {
 	const action = setTodolistsAC([
 		{id: "1", title: "title 1", filter: "All", order: 0, addedDate: ""},
 		{id: "2", title: "title 2", filter: "All", order: 0, addedDate: ""}

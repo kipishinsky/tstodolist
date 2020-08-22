@@ -87,7 +87,7 @@ test('correct filter of todoList should be changed', () => {
 	expect(endState[1].filter).toBe(newFilter);
 });
 
-test('todolists should be set to the state', () => {
+test('todolists-lists should be set to the state', () => {
 
 	let todoListId1 = v1();
 	let todoListId2 = v1();

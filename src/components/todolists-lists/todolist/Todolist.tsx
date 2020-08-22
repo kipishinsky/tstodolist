@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect} from 'react';
-import {AddNewItemComponent} from '../add-new-item/AddNewItemComponent';
-import {ChangeTitleNameComponent} from '../change-title-item/ChangeTitleNameComponent';
+import {AddNewItemComponent} from '../../add-new-item/AddNewItemComponent';
+import {ChangeTitleNameComponent} from '../../change-title-item/ChangeTitleNameComponent';
 import {Button, IconButton} from '@material-ui/core';
 import {Delete} from '@material-ui/icons';
-import {Task} from '../tasks/Task';
-import {FilterValuesType} from "../../state/reducers/todolists-reducer/todolists-reducer";
-import {TaskStatuses, TaskType} from "../../api/tasks/tasks-api";
-import {getTasksThunkCreator} from "../../state/reducers/tasks-reducer/tasks-reducer";
+import {Task} from './tasks/Task';
+import {FilterValuesType} from "./todolists-reducer/todolists-reducer";
+import {TaskStatuses, TaskType} from "../../../api/tasks/tasks-api";
+import {getTasksThunkCreator} from "./tasks-reducer/tasks-reducer";
 import {useDispatch} from "react-redux";
 
 // условия типов пропсов для функции тудулист
