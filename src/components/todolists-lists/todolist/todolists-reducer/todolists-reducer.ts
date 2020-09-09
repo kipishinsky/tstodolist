@@ -1,5 +1,6 @@
 import {todolistsAPI, TodolistType} from "../../../../api/todolist/todolists-api";
 import {Dispatch} from "redux";
+import {setStatusAC, SetStatusActionType} from '../../../app/app-reducer'
 
 const initialState: Array<TodolistsReducerType> = []
 
@@ -31,16 +32,20 @@ export const changeTodoListFilterAC = (id: string, filterValue: FilterValuesType
 export const setTodolistsAC = (todolists: Array<TodolistType>) => ({type: 'SET-TODOLISTS', todolists}) as const
 
 //thunks
-export const fetchTodolistsThunkCreator = () => (dispatch: Dispatch<ActionType>) => {
+export const fetchTodolistsThunkCreator = () => (dispatch: Dispatch<ActionType | SetStatusActionType>) => {
+	dispatch(setStatusAC('loading'))
 	todolistsAPI.getTodolists()
 		.then((res) => {
 			dispatch(setTodolistsAC(res.data))
+			dispatch(setStatusAC('succeeded'))
 		})
 }
-export const removeTodolistsTC = (todolistId: string) => (dispatch: Dispatch<ActionType>) => {
+export const removeTodolistsTC = (todolistId: string) => (dispatch: Dispatch<ActionType | SetStatusActionType>) => {
+	dispatch(setStatusAC('loading'))
 	todolistsAPI.deleteTodolists(todolistId)
 		.then((res) => {
 				dispatch(removeTodolistAC(todolistId))
+			dispatch(setStatusAC('succeeded'))
 			}
 		)
 }

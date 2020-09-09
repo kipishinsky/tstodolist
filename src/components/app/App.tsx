@@ -5,11 +5,14 @@ import {Menu} from '@material-ui/icons'
 import {TaskType} from '../../api/tasks/tasks-api'
 import {TodolistsList} from "../todolists-lists/TodolistsList";
 import {ErrorSnackBar} from '../error-snackbar/ErrorSnackBar'
+import {useSelector} from 'react-redux'
+import {RootStateType} from './store'
+import {RequestStatusType} from './app-reducer'
 
 
 function App() {
 	console.log('App render')
-//{status === 'loading' && <LinearProgress color={'secondary'} />}
+	const status = useSelector<RootStateType, RequestStatusType> (state => state.app.status)
 	return (
 		<div className={'App'}>
 			<ErrorSnackBar />
@@ -23,11 +26,8 @@ function App() {
 					</Typography>
 					<Button color="inherit">Login</Button>
 				</Toolbar>
-				<LinearProgress />
+				{status === 'loading' && <LinearProgress color={'secondary'} />}
 			</AppBar>
-
-
-
 			<Container fixed>
 				<TodolistsList />
 			</Container>
