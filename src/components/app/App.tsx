@@ -9,7 +9,7 @@ import {ErrorSnackBar} from '../error-snackbar/ErrorSnackBar'
 
 function App() {
 	console.log('App render')
-
+//{status === 'loading' && <LinearProgress color={'secondary'} />}
 	return (
 		<div className={'App'}>
 			<ErrorSnackBar />
@@ -25,6 +25,8 @@ function App() {
 				</Toolbar>
 				<LinearProgress />
 			</AppBar>
+
+
 
 			<Container fixed>
 				<TodolistsList />
