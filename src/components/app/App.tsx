@@ -9,8 +9,12 @@ import {useSelector} from 'react-redux'
 import {RootStateType} from './store'
 import {RequestStatusType} from './app-reducer'
 
+type AppPropsType = {
+	demo?: boolean
+}
 
-function App() {
+
+function App( {demo = false}: AppPropsType) {
 	console.log('App render')
 	const status = useSelector<RootStateType, RequestStatusType> (state => state.app.status)
 	return (
@@ -22,14 +26,14 @@ function App() {
 						<Menu/>
 					</IconButton>
 					<Typography variant="h6">
-						News
+						Todolist APP
 					</Typography>
 					<Button color="inherit">Login</Button>
 				</Toolbar>
 				{status === 'loading' && <LinearProgress color={'secondary'} />}
 			</AppBar>
 			<Container fixed>
-				<TodolistsList />
+				<TodolistsList demo={demo} />
 			</Container>
 		</div>
 	)

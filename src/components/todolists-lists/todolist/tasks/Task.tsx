@@ -43,13 +43,7 @@ export const Task = React.memo ((props: TasksPropsType) => {
 				changeTitleValue={props.task.title}
 				onChange={onChangeTitle}
 			/>
-			{/*добавили иконку удаления, с библиотеками
-                                // with yarn
-                                yarn add @material-ui/core
-                                
-                                // with yarn
-                                yarn add @material-ui/icons
-                                */}
+
 			<IconButton onClick={onClickHandler}>
 				<Delete/>
 			</IconButton>

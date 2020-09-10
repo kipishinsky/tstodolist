@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {RootStateType} from "../app/store";
+import React, {useCallback, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {RootStateType} from '../app/store'
 import {
 	addTodolistsTC,
 	changeTodoListFilterAC,
@@ -9,21 +9,29 @@ import {
 	FilterValuesType,
 	removeTodolistsTC,
 	TodolistsReducerType
-} from "./todolist/todolists-reducer/todolists-reducer";
-import {addTasksTC, changeTaskStatusTC, removeTaskTC} from "./todolist/tasks-reducer/tasks-reducer";
-import {TaskStatuses} from "../../api/tasks/tasks-api";
-import {Grid, Paper} from "@material-ui/core";
-import {AddNewItemComponent} from "../add-new-item/AddNewItemComponent";
-import {TodoList} from "./todolist/Todolist";
-import {AppTasksType} from "../app/App";
+} from './todolist/todolists-reducer/todolists-reducer'
+import {addTasksTC, changeTaskStatusTC, removeTaskTC} from './todolist/tasks-reducer/tasks-reducer'
+import {TaskStatuses} from '../../api/tasks/tasks-api'
+import {Grid, Paper} from '@material-ui/core'
+import {AddNewItemComponent} from '../add-new-item/AddNewItemComponent'
+import {TodoList} from './todolist/Todolist'
+import {AppTasksType} from '../app/App'
 
-export const TodolistsList: React.FC = () => {
+
+type TodolistsListPropsType = {
+	demo?: boolean
+}
+
+export const TodolistsList: React.FC <TodolistsListPropsType> = ({demo=false}) => {
 
 	const dispatch = useDispatch()
 	const todolists = useSelector<RootStateType, Array<TodolistsReducerType>>(state => state.todolists)
 	const tasks = useSelector<RootStateType, AppTasksType>(state => state.tasks)
 
 	useEffect(() => {
+		if (demo) {
+			return
+		}
 		dispatch(fetchTodolistsThunkCreator())
 	}, [])
 
@@ -79,31 +87,30 @@ export const TodolistsList: React.FC = () => {
 
 				{todolists.map(tl => {
 
-					let allTodolistTasks = tasks[tl.id];
-					let tasksForTodoList = allTodolistTasks;
+					let allTodolistTasks = tasks[tl.id]
+					let tasksForTodoList = allTodolistTasks
 
-					if (tl.filter === "Active") {
-						tasksForTodoList = allTodolistTasks.filter(t => t.status === TaskStatuses.New);
+					if (tl.filter === 'Active') {
+						tasksForTodoList = allTodolistTasks.filter(t => t.status === TaskStatuses.New)
 					}
-					if (tl.filter === "Completed") {
-						tasksForTodoList = allTodolistTasks.filter(t => t.status === TaskStatuses.Completed);
+					if (tl.filter === 'Completed') {
+						tasksForTodoList = allTodolistTasks.filter(t => t.status === TaskStatuses.Completed)
 					}
 					return (
 						<Grid item>
 							<Paper style={{padding: '10px'}}>
 								<TodoList
 									key={tl.id}
-									todolistId={tl.id}
-									todolistTitle={tl.title} // заголовки компоненты
+									todolist={tl}
 									tasks={tasksForTodoList}  // отфильтрованные таски по кнопкам
 									removeTask={removeTask} //  удаление таски
 									changeFilter={changeFilterTodolist} // юзабельность кнопок all active completed
 									addNewTask={addNewTask} // добавление новой таски
 									changeTaskStatus={changeTaskStatus} //передаем функцию, чтобы менять статус таске
 									changeTaskTitle={changeTaskTitle} //передаем функцию, чтобы менять статус таске
-									filterButton={tl.filter} // передаем массив фильтров let [filter, setFilter] = useState <FilterValuesType>
 									removeTodoList={removeTodoList}
 									changeTodoListTitle={changeTodoListTitle}
+									demo={demo} // тестовое состояние
 								/>
 							</Paper>
 						</Grid>

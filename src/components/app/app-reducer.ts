@@ -24,19 +24,17 @@ export const setErrorAC = (error: string | null) => ({
 	type: 'APP/SET-ERROR', error
 }) as const
 
+export type SetErrorActionType = ReturnType<typeof setErrorAC>
+export type SetStatusActionType = ReturnType<typeof setStatusAC>
 
 
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-
 export type InitialStateType = {
 	// происходит ли сейчас взаимодействие с сервером
 	status: RequestStatusType,
 	error: string | null
 }
-
-export type SetErrorActionType = ReturnType<typeof setErrorAC>
-export type SetStatusActionType = ReturnType<typeof setStatusAC>
 
 type ActionsType =
 	| SetErrorActionType

@@ -24,7 +24,7 @@ export const tasksAPI = {
 		return instance.delete < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`)
 	},
 	updateTaskTitle(taskId: string, status: UpdateTaskModelType, todolistId: string,) {
-		return instance.put < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`, {title: status})
+		return instance.put < ResponseTasksType > (`todo-lists/${todolistId}/tasks/${taskId}`, status)
 	}
 }
 
@@ -46,6 +46,7 @@ export type UpdateTaskModelType = {
 	title: string,
 	description: string,
 	status: TaskStatuses,
+	completed: boolean,
 	priority: TaskPriorities,
 	startDate: string,
 	deadline: string
@@ -63,9 +64,11 @@ export enum TaskPriorities {
 	Urgent = 3,
 	Later = 4
 }
-type ResponseTasksType<D={}> = {
+export type ResponseTasksType<D={}> = {
 	error: string | null
 	totalCount: number
 	data: D
-	items: TaskType [] // Array<TaskType>
+	items: TaskType [] // Array<TaskType>,
+	messages: string,
+	resultCode: number
 }
