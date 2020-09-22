@@ -64,7 +64,7 @@ export function App({demo = false}: AppPropsType) {
 					{status === 'loading' && <LinearProgress color={'secondary'}/>}
 				</AppBar>
 				<Container fixed>
-					<Route exact path={'/'} render={() => <TodolistsList demo={demo}/>}/>
+					<Route path={'/'} render={() => <TodolistsList demo={demo}/>}/>
 
 					<Route exact path={'/login'} render={() => <Login demo={demo}/>}/>
 				</Container>
