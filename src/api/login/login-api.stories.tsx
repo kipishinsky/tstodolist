@@ -1,55 +1,51 @@
-import React, { useState} from 'react'
-import {loginApi} from "./login-api";
+import React, { useState } from 'react'
 
 export default {
-	title: 'API'
+	title: 'Login API'
 }
 
-/*
-export const CreateTask = () => {
+type DataType = {
+	email: string,
+	password: string,
+	rememberMe: boolean | string,
+	captcha?: string | boolean
+}
 
-	const [state, setState] = useState<any>(null)
-	const [todolistId, setTodolistId] = useState<any>('')
-	const [newTitle, setNewTitle] = useState<any> ('')
 
-	const createTask = () => {
 
-		loginApi.createTask(todolistId, newTitle)
-			.then ( (res) => {
-				setState(res.data)
-			})
+export const Login = () => {
+
+	//паль тип
+	const [email, setEmail] = useState<string>('')
+	const [password, setPassword] = useState<string>('')
+	const [rememberMe, setRememberMe] = useState<string>('')
+	const [result, setResult] = useState<DataType>({
+		email: 'No login',
+		password: 'No password',
+		rememberMe: false
+	})
+
+	const createLogin = () => {
+		setResult({
+			email: email,
+			password: password,
+			rememberMe: rememberMe
+		})
 	}
 
-	return <div> {JSON.stringify(state)}
+
+	return <div> {JSON.stringify(result)}
 		<div>
-			<input placeholder={'todolistId'} type="text" value={todolistId} onChange={ (e) => {setTodolistId(e.currentTarget.value)}}/>
-			<input placeholder={'create title'} type="text" value={newTitle} onChange={ (e) => {setNewTitle(e.currentTarget.value)}} />
-			<button onClick={createTask}>create task</button>
+			<input placeholder={'login'} type="text" value={email} onChange={ (e) => {setEmail(e.currentTarget.value)}}/>
+			<input placeholder={'password'} type="password" value={password} onChange={ (e) => {setPassword(e.currentTarget.value)}} />
+			<input type="checkbox" onChange={ (e) => {setRememberMe(e.currentTarget.value)}} />
+			<button onClick={createLogin}>login</button>
 		</div>
 	</div>
 }
 
 
-export const DeleteTask = () => {
+/*export const Logout = () => {
 
-	const [state, setState] = useState<any>(null)
-	const [taskId, setTaskId] = useState<any>('')
-	const [todolistId, setTodolistId] = useState<any>('')
+}*/
 
-	const deleteTask = () => {
-
-		loginApi.deleteTask(todolistId, taskId)
-			.then ( (res) => {
-				setState(res.data)
-			})
-	}
-
-	return <div> {JSON.stringify(state)}
-		<div>
-			<input placeholder={'todolistId'} type="text" value={todolistId} onChange={ (e) => {setTodolistId(e.currentTarget.value)}}/>
-			<input placeholder={'taskId'} type="text" value={taskId} onChange={ (e) => {setTaskId(e.currentTarget.value)}}/>
-			<button onClick={deleteTask}>delete task</button>
-		</div>
-	</div>
-}
-*/

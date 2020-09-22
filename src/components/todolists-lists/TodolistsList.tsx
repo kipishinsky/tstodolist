@@ -16,13 +16,13 @@ import {Grid, Paper} from '@material-ui/core'
 import {AddNewItemComponent} from '../add-new-item/AddNewItemComponent'
 import {TodoList} from './todolist/Todolist'
 import {AppTasksType} from '../app/App'
-import { Redirect } from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 
 type TodolistsListPropsType = {
 	demo?: boolean
 }
 
-export const TodolistsList: React.FC <TodolistsListPropsType> = ({demo=false}) => {
+export const TodolistsList: React.FC<TodolistsListPropsType> = ({demo = false}) => {
 
 	const dispatch = useDispatch()
 	const todolists = useSelector<RootStateType, Array<TodolistsReducerType>>(state => state.todolists)
@@ -34,7 +34,7 @@ export const TodolistsList: React.FC <TodolistsListPropsType> = ({demo=false}) =
 			return
 		}
 		dispatch(fetchTodolistsThunkCreator())
-	}, [])
+	}, [isLoggedIn])
 
 
 	// удаление таски по id

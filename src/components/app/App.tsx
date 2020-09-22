@@ -32,7 +32,7 @@ export function App({demo = false}: AppPropsType) {
 
 	useEffect(() => {
 		dispatch(initializedAppTC())
-	})
+	},[])
 
 	const logoutHandler = useCallback(() => {
 		debugger

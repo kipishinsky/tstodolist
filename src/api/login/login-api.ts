@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 
 const settings = {
 	withCredentials: true,
@@ -15,13 +15,13 @@ const instance = axios.create({
 export const loginApi = {
 
 	createLogin(data: LoginParametersType) {
-		return instance.post < ResponseLoginType <{userId?: number}>> (`auth/login`, data)
+		return instance.post <ResponseLoginType<{ userId?: number }>>(`auth/login`, data)
 	},
 	getStatusMe() {
-		return instance.get < ResponseLoginType <{id: number, email: string, login: string }>> (`auth/me`)
+		return instance.get <ResponseLoginType<{ id: number, email: string, login: string }>>(`auth/me`)
 	},
-	deleteLogin () {
-		return instance.delete < ResponseLoginType > (`auth/login`)
+	deleteLogin() {
+		return instance.delete <ResponseLoginType>(`auth/login`)
 	}
 }
 
@@ -33,7 +33,7 @@ export type LoginParametersType = {
 	rememberMe: boolean,
 	captcha?: string | boolean
 }
-export type ResponseLoginType<D={}> = {
+export type ResponseLoginType<D = {}> = {
 	resultCode: number,
 	messages: Array<string>,
 	data: D

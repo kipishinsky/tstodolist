@@ -22,49 +22,41 @@ export const setIsLoggedInAC = (value: boolean) =>
 
 // thunks
 export const loginTC = (data: LoginParametersType) => (dispatch: Dispatch<ActionsType>) => {
-	//debugger
 	dispatch(setStatusAC('loading'))
 	loginApi.createLogin(data).then(res => {
 			if (res.data.resultCode === 0) {
-				//debugger
 				dispatch(setIsLoggedInAC(true))
 				dispatch(setStatusAC('succeeded'))
 			} else {
 				// @ts-ignore
 				handleServerAppError(res.data, dispatch)
-
 			}
 		}
 	).catch((error) => {
 			handleServerNetworkError(error, dispatch)
-
 		}
 	)
 }
 
 export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
-	//debugger
 	dispatch(setStatusAC('loading'))
 	loginApi.deleteLogin().then(res => {
 			if (res.data.resultCode === 0) {
-				//debugger
 				dispatch(setIsLoggedInAC(false))
 				dispatch(setStatusAC('succeeded'))
 			} else {
 				// @ts-ignore
 				handleServerAppError(res.data, dispatch)
-
 			}
 		}
 	).catch((error) => {
 			handleServerNetworkError(error, dispatch)
-
 		}
 	)
 }
 
 // types
-type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetStatusActionType | SetErrorActionType
-type InitialStateType = {
+export type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetStatusActionType | SetErrorActionType
+export type InitialStateType = {
 	isLoggedIn: boolean
 }

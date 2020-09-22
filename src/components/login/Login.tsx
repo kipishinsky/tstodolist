@@ -5,13 +5,13 @@ import {loginTC} from './auth-reducer'
 import {useDispatch, useSelector} from 'react-redux'
 import {setStatusAC} from '../app/app-reducer'
 import {RootStateType} from '../app/store'
-import { Redirect } from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 
 type LoginPropsType = {
 	demo?: boolean
 }
 
-export const Login: React.FC <LoginPropsType> = ({demo=false}) => {
+export const Login: React.FC<LoginPropsType> = ({demo = false}) => {
 
 	const dispatch = useDispatch()
 	const isLoggedIn = useSelector<RootStateType>(state => state.auth.isLoggedIn)
@@ -55,11 +55,10 @@ export const Login: React.FC <LoginPropsType> = ({demo=false}) => {
 	}, [])
 
 
-	if(isLoggedIn) {
+	if (isLoggedIn) {
 		return <Redirect to={'/'}/>
 	}
 
-	//debugger
 	return <Grid container justify="center">
 		<Grid item xs={4}>
 			<form onSubmit={formik.handleSubmit}>
@@ -72,28 +71,19 @@ export const Login: React.FC <LoginPropsType> = ({demo=false}) => {
 						<TextField
 							label="Email"
 							margin="normal"
-							name="email"
-							onChange={formik.handleChange}
-							value={formik.values.email}
-							//{...formik.getFieldProps('email')}
+							{...formik.getFieldProps('email')}
 						/>
 						{formik.errors.email ? <div>{formik.errors.email}</div> : null}
 						<TextField
 							type="password"
 							label="Password"
 							margin="normal"
-							name="password"
-							//onChange={formik.handleChange}
-							//value={formik.values.password}
 							{...formik.getFieldProps('password')}
 						/>
 						{formik.errors.password ? <div>{formik.errors.password}</div> : null}
 						<FormControlLabel
 							label={'Remember me'}
 							control={<Checkbox/>}
-							//name="rememberMe"
-							//onChange={formik.handleChange}
-							//value={formik.values.rememberMe}
 							{...formik.getFieldProps('rememberMe')}
 						/>
 						<Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
