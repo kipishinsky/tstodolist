@@ -2,7 +2,6 @@ import {todolistsAPI, TodolistType} from '../../../../api/todolist/todolists-api
 import {Dispatch} from 'redux'
 import {
 	RequestStatusType,
-	setErrorAC,
 	SetErrorActionType,
 	setStatusAC,
 	SetStatusActionType

@@ -134,7 +134,7 @@ export const addTasksTC = (todolistId: string, title: string) => (dispatch: Disp
 export const changeTaskStatusTC = (taskId: string, domainModel: UpdateDomainTaskType, todolistId: string) =>
 	(dispatch: Dispatch<ThunkType>, getState: () => RootStateType) => {
 		const task = getState().tasks[todolistId].find(t => t.id === taskId)
-		debugger
+
 		if (task) {
 			const apiModel: UpdateTaskModelType = {
 				title: task.title,
@@ -146,7 +146,7 @@ export const changeTaskStatusTC = (taskId: string, domainModel: UpdateDomainTask
 				deadline: task.deadline,
 				...domainModel
 			}
-debugger
+			
 			dispatch(setStatusAC('loading'))
 			tasksAPI.updateTaskTitle(taskId, apiModel, todolistId)
 				.then((res) => {
@@ -165,28 +165,6 @@ debugger
 		}
 
 	}
-
-/*
-example
-
-export const addTasksTC = (title: string, todolistId: string) => {
-	debugger
-	return (dispatch: Dispatch) => {
-		debugger
-		tasksAPI.createTask(title, todolistId )
-			.then(res => {
-				debugger
-				// @ts-ignore
-				const task = res.data.data.item
-				// @ts-ignore
-				const action = addTasksAC(task)
-				dispatch(action)
-			})
-			.catch((err) => {
-				debugger
-			})
-	}
-}*/
 
 type ThunkType = ActionType | SetErrorActionType | SetStatusActionType
 
