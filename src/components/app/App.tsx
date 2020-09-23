@@ -32,10 +32,9 @@ export function App({demo = false}: AppPropsType) {
 
 	useEffect(() => {
 		dispatch(initializedAppTC())
-	},[])
+	}, [initialized])
 
 	const logoutHandler = useCallback(() => {
-		debugger
 		dispatch(logoutTC())
 	}, [])
 
@@ -45,7 +44,6 @@ export function App({demo = false}: AppPropsType) {
 			<CircularProgress/>
 		</div>
 	}
-
 
 	return (
 		<BrowserRouter>
@@ -66,7 +64,7 @@ export function App({demo = false}: AppPropsType) {
 				<Container fixed>
 					<Route path={'/'} render={() => <TodolistsList demo={demo}/>}/>
 
-					<Route exact path={'/login'} render={() => <Login demo={demo}/>}/>
+					<Route exact path={'/login'} render={() => <Login/>}/>
 				</Container>
 			</div>
 		</BrowserRouter>

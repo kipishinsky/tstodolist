@@ -7,11 +7,7 @@ import {setStatusAC} from '../app/app-reducer'
 import {RootStateType} from '../app/store'
 import {Redirect} from 'react-router-dom'
 
-type LoginPropsType = {
-	demo?: boolean
-}
-
-export const Login: React.FC<LoginPropsType> = ({demo = false}) => {
+export const Login = () => {
 
 	const dispatch = useDispatch()
 	const isLoggedIn = useSelector<RootStateType>(state => state.auth.isLoggedIn)
@@ -47,25 +43,17 @@ export const Login: React.FC<LoginPropsType> = ({demo = false}) => {
 		}
 	})
 
-	useEffect(() => {
-		if (demo) {
-			return
-		}
-		dispatch(setStatusAC('succeeded'))
-	}, [])
-
-
 	if (isLoggedIn) {
 		return <Redirect to={'/'}/>
 	}
 
-	return <Grid container justify="center">
+	return <Grid container justify="center" >
 		<Grid item xs={4}>
 			<form onSubmit={formik.handleSubmit}>
 				<FormControl>
 					<FormLabel>
-						<p>Email: login.auth@yandex.ru</p>
-						<p>Password: pentagon8000</p>
+						<p>Email: free@samuraijs.com</p>
+						<p>Password: free</p>
 					</FormLabel>
 					<FormGroup>
 						<TextField
