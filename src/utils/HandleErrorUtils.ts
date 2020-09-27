@@ -1,20 +1,21 @@
-import {setErrorAC, SetErrorActionType, setStatusAC, SetStatusActionType} from '../components/app/app-reducer'
+import {setErrorAC, setStatusAC} from '../components/app/app-reducer'
 import {Dispatch} from 'redux'
-import {ResponseTasksType} from '../api/tasks/tasks-api'
+import {} from '../api/tasks/tasks-api'
+import {ResponseTasksType} from '../common/types'
 
-export const handleServerAppError = <D>(data: ResponseTasksType<D>, dispatch: Dispatch<ThunkType>) => {
+export const handleServerAppError = <D>(data: ResponseTasksType<D>, dispatch: Dispatch) => {
 	if (data.messages.length) {
-		dispatch(setErrorAC(data.messages[0]))
+
+		dispatch(setErrorAC({error: data.messages[0]}))
 	} else {
-		dispatch(setErrorAC('some error'))
+		dispatch(setErrorAC({error: 'some error'}))
 	}
-	dispatch(setStatusAC('failed'))
+	dispatch(setStatusAC({status: 'failed'}))
 }
 
-export const handleServerNetworkError = (error: any, dispatch: Dispatch<ThunkType>) => {
+export const handleServerNetworkError = (error: any, dispatch: Dispatch) => {
 	dispatch(setErrorAC(error.message ? error.message : 'some error occurred'))
-	dispatch(setStatusAC('succeeded'))
+	dispatch(setStatusAC({status: 'succeeded'}))
 }
 
 
-type ThunkType = SetErrorActionType | SetStatusActionType

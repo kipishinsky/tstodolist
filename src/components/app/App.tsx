@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect} from 'react'
-import './App.css'
 import {
 	AppBar,
 	Button,
@@ -11,17 +10,17 @@ import {
 	Typography
 } from '@material-ui/core'
 import {Menu} from '@material-ui/icons'
-
 import {TodolistsList} from '../todolists-lists/TodolistsList'
 import {ErrorSnackBar} from '../error-snackbar/ErrorSnackBar'
 import {useDispatch, useSelector} from 'react-redux'
 import {RootStateType} from './store'
-import {initializedAppTC, RequestStatusType} from './app-reducer'
+import {initializedAppTC} from './app-reducer'
 import {BrowserRouter, Route} from 'react-router-dom'
 import {Login} from '../login/Login'
 import {logoutTC} from '../login/auth-reducer'
-import {TaskType} from '../../common/types'
+import {AppPropsType, RequestStatusType} from '../../common/types'
 
+import './App.css'
 
 export function App({demo = false}: AppPropsType) {
 	console.log('App render')
@@ -71,12 +70,3 @@ export function App({demo = false}: AppPropsType) {
 		</BrowserRouter>
 	)
 }
-
-export type AppTasksType = {
-	[key: string]: Array<TaskType>
-}
-
-type AppPropsType = {
-	demo?: boolean
-}
-

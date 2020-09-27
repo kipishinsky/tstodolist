@@ -2,8 +2,9 @@ import {Dispatch} from 'redux'
 import {loginApi} from '../../api/login/login-api'
 import {setIsLoggedInAC} from '../login/auth-reducer'
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {AppInitialStateType, RequestStatusType} from '../../common/types'
 
-const initialState: InitialStateType = {
+const initialState: AppInitialStateType = {
 	status: 'loading',
 	error: null,
 	initialized: false
@@ -42,15 +43,3 @@ export const initializedAppTC = () => (dispatch: Dispatch) => {
 		dispatch(setStatusAC({status: 'succeeded'}))
 	})
 }
-
-//types
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-export type InitialStateType = {
-	// происходит ли сейчас взаимодействие с сервером
-	status: RequestStatusType,
-	// ошибку пишем сюда
-	error: string | null,
-	// проверяет логинизацию
-	initialized: boolean
-}
-

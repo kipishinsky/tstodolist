@@ -7,19 +7,20 @@ import {
 	changeTodoTitleTC,
 	fetchTodolistsThunkCreator,
 	removeTodolistsTC,
-
 } from './todolist/todolists-reducer/todolists-reducer'
 import {addTasksTC, changeTaskStatusTC, removeTaskTC} from './todolist/tasks-reducer/tasks-reducer'
 import {Grid, Paper} from '@material-ui/core'
 import {AddNewItemComponent} from '../add-new-item/AddNewItemComponent'
 import {TodoList} from './todolist/Todolist'
-import {AppTasksType} from '../app/App'
-import {Redirect} from 'react-router-dom'
-import {FilterValuesType, TaskStatuses, TodolistsReducerType} from '../../common/types'
 
-type TodolistsListPropsType = {
-	demo?: boolean
-}
+import {Redirect} from 'react-router-dom'
+import {
+	AppTasksType,
+	FilterValuesType,
+	TaskStatuses,
+	TodolistsListPropsType,
+	TodolistsReducerType
+} from '../../common/types'
 
 export const TodolistsList: React.FC<TodolistsListPropsType> = ({demo = false}) => {
 

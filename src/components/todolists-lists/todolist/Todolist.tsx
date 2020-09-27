@@ -6,22 +6,9 @@ import {Delete} from '@material-ui/icons'
 import {Task} from './tasks/Task'
 import {getTasksThunkCreator} from './tasks-reducer/tasks-reducer'
 import {useDispatch} from 'react-redux'
-import {FilterValuesType, TaskStatuses, TaskType, TodolistsReducerType} from '../../../common/types'
+import {TaskStatuses, TodolistPropsType} from '../../../common/types'
 
-type TodolistType = {
-	todolist: TodolistsReducerType
-	tasks: Array<TaskType>
-	removeTask: (todoListsId: string, tasksId: string,) => void
-	changeFilterTodoist: (id: string, filterValue: FilterValuesType) => void
-	addNewTask: (tasksNewTitleInput: string, todoListId: string) => void
-	changeTaskStatus: (tasksId: string, status: TaskStatuses, todoListsId: string) => void
-	changeTaskTitle: (tasksId: string, tasksTitle: string, todoListsId: string) => void
-	removeTodoList: (todoListsId: string) => void
-	changeTodoListTitle: (todoListsId: string, newChangeTitleValue: string) => void
-	demo?: boolean
-}
-
-export const TodoList = React.memo(function ({demo = false, ...props}: TodolistType) {
+export const TodoList = React.memo(function ({demo = false, ...props}: TodolistPropsType) {
 	console.log(' TodoList render')
 	const dispatch = useDispatch()
 

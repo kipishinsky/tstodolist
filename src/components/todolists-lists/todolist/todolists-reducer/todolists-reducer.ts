@@ -1,9 +1,9 @@
 import {todolistsAPI} from '../../../../api/todolist/todolists-api'
 import {Dispatch} from 'redux'
-import {RequestStatusType, setStatusAC,} from '../../../app/app-reducer'
+import { setStatusAC,} from '../../../app/app-reducer'
 import {handleServerNetworkError} from '../../../../utils/HandleErrorUtils'
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {FilterValuesType, TodolistsReducerType, TodolistType} from '../../../../common/types'
+import {FilterValuesType, RequestStatusType, TodolistsReducerType, TodolistType} from '../../../../common/types'
 
 const initialState: Array<TodolistsReducerType> = []
 

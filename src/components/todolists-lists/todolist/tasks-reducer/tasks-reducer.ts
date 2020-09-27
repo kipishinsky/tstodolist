@@ -1,11 +1,11 @@
-import {AppTasksType} from '../../../app/App'
+
 import {Dispatch} from 'redux'
 import {RootStateType} from '../../../app/store'
 import {setStatusAC} from '../../../app/app-reducer'
 import {handleServerAppError, handleServerNetworkError} from '../../../../utils/HandleErrorUtils'
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from '../todolists-reducer/todolists-reducer'
-import {TaskPriorities, TaskStatuses, TaskType, UpdateTaskModelType} from '../../../../common/types'
+import {AppTasksType, TaskPriorities, TaskStatuses, TaskType, UpdateTaskModelType} from '../../../../common/types'
 import {tasksAPI} from '../../../../api/tasks/tasks-api'
 
 const initialState: AppTasksType = {}
