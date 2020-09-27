@@ -11,7 +11,7 @@ import {
 	Typography
 } from '@material-ui/core'
 import {Menu} from '@material-ui/icons'
-import {TaskType} from '../../api/tasks/tasks-api'
+
 import {TodolistsList} from '../todolists-lists/TodolistsList'
 import {ErrorSnackBar} from '../error-snackbar/ErrorSnackBar'
 import {useDispatch, useSelector} from 'react-redux'
@@ -20,6 +20,7 @@ import {initializedAppTC, RequestStatusType} from './app-reducer'
 import {BrowserRouter, Route} from 'react-router-dom'
 import {Login} from '../login/Login'
 import {logoutTC} from '../login/auth-reducer'
+import {TaskType} from '../../common/types'
 
 
 export function App({demo = false}: AppPropsType) {

@@ -1,6 +1,7 @@
 import {Dispatch} from 'redux'
 import {loginApi} from '../../api/login/login-api'
 import {setIsLoggedInAC} from '../login/auth-reducer'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
 const initialState: InitialStateType = {
 	status: 'loading',
@@ -8,47 +9,41 @@ const initialState: InitialStateType = {
 	initialized: false
 }
 
-export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-	switch (action.type) {
-		case 'APP/SET-STATUS':
-			return {...state, status: action.status}
-		case 'APP/SET-ERROR':
-			return {...state, error: action.error}
-		case 'APP/SET-INITIALIZED':
-			return {...state, initialized: action.init}
-		default:
-			return state
+const slice = createSlice({
+	name: 'app',
+	initialState: initialState,
+	reducers: {
+		setStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
+			state.status = action.payload.status
+		},
+		setErrorAC(state, action: PayloadAction<{ error: string | null }>) {
+			state.error = action.payload.error
+		},
+		setAppInitializedAC(state, action: PayloadAction<{ init: boolean }>) {
+			state.initialized = action.payload.init
+		}
 	}
-}
+})
 
-//action
-export const setStatusAC = (status: RequestStatusType) => ({
-	type: 'APP/SET-STATUS', status
-}) as const
-export const setErrorAC = (error: string | null) => ({
-	type: 'APP/SET-ERROR', error
-}) as const
-export const setAppInitializedAC = (init: boolean) => ({
-	type: 'APP/SET-INITIALIZED', init
-}) as const
+export const appReducer = slice.reducer
+
+export const setStatusAC = slice.actions.setStatusAC
+export const setErrorAC = slice.actions.setErrorAC
+export const setAppInitializedAC = slice.actions.setAppInitializedAC
 
 //thunk
 export const initializedAppTC = () => (dispatch: Dispatch) => {
-	loginApi.getStatusMe().then( res => {
-		if(res.data.resultCode === 0) {
-			dispatch(setIsLoggedInAC(true))
-			dispatch(setStatusAC('succeeded'))
+	loginApi.getStatusMe().then(res => {
+		if (res.data.resultCode === 0) {
+			dispatch(setIsLoggedInAC({value: true}))
+			dispatch(setStatusAC({status: 'succeeded'}))
 		}
-		dispatch(setAppInitializedAC(true))
-		dispatch(setStatusAC('succeeded'))
+		dispatch(setAppInitializedAC({init: true}))
+		dispatch(setStatusAC({status: 'succeeded'}))
 	})
 }
 
-export type SetErrorActionType = ReturnType<typeof setErrorAC>
-export type SetStatusActionType = ReturnType<typeof setStatusAC>
-export type SetAppInitializedActionType = ReturnType<typeof setAppInitializedAC>
-
-
+//types
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 export type InitialStateType = {
 	// происходит ли сейчас взаимодействие с сервером
@@ -59,7 +54,3 @@ export type InitialStateType = {
 	initialized: boolean
 }
 
-type ActionsType =
-	| SetErrorActionType
-	| SetStatusActionType
-	| SetAppInitializedActionType

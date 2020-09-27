@@ -2,7 +2,7 @@ import React, {ChangeEvent, useCallback} from 'react';
 import {Checkbox, IconButton} from '@material-ui/core';
 import {ChangeTitleNameComponent} from '../../../change-title-item/ChangeTitleNameComponent';
 import {Delete} from '@material-ui/icons';
-import {TaskStatuses, TaskType} from "../../../../api/tasks/tasks-api";
+import {TaskStatuses, TaskType} from '../../../../common/types'
 
 
 type TasksPropsType = {

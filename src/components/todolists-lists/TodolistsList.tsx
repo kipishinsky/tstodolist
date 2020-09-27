@@ -6,17 +6,16 @@ import {
 	changeTodoListFilterAC,
 	changeTodoTitleTC,
 	fetchTodolistsThunkCreator,
-	FilterValuesType,
 	removeTodolistsTC,
-	TodolistsReducerType
+
 } from './todolist/todolists-reducer/todolists-reducer'
 import {addTasksTC, changeTaskStatusTC, removeTaskTC} from './todolist/tasks-reducer/tasks-reducer'
-import {TaskStatuses} from '../../api/tasks/tasks-api'
 import {Grid, Paper} from '@material-ui/core'
 import {AddNewItemComponent} from '../add-new-item/AddNewItemComponent'
 import {TodoList} from './todolist/Todolist'
 import {AppTasksType} from '../app/App'
 import {Redirect} from 'react-router-dom'
+import {FilterValuesType, TaskStatuses, TodolistsReducerType} from '../../common/types'
 
 type TodolistsListPropsType = {
 	demo?: boolean
@@ -59,8 +58,8 @@ export const TodolistsList: React.FC<TodolistsListPropsType> = ({demo = false}) 
 
 
 	// меняем данные кнопок не хардкодом, а при нажатии (change Filter - изменить фильтр)
-	const changeFilterTodolist = useCallback((filterValue: FilterValuesType, todoListsId: string) => {
-		dispatch(changeTodoListFilterAC(todoListsId, filterValue))
+	const changeFilterTodolist = useCallback((id: string, filterValue: FilterValuesType) => {
+		dispatch(changeTodoListFilterAC({id, filterValue}))
 	}, [])
 
 	// удаление тудулиста
@@ -109,7 +108,7 @@ export const TodolistsList: React.FC<TodolistsListPropsType> = ({demo = false}) 
 									todolist={tl}
 									tasks={tasksForTodoList}  // отфильтрованные таски по кнопкам
 									removeTask={removeTask} //  удаление таски
-									changeFilter={changeFilterTodolist} // юзабельность кнопок all active completed
+									changeFilterTodoist={changeFilterTodolist} // юзабельность кнопок all active completed
 									addNewTask={addNewTask} // добавление новой таски
 									changeTaskStatus={changeTaskStatus} //передаем функцию, чтобы менять статус таске
 									changeTaskTitle={changeTaskTitle} //передаем функцию, чтобы менять статус таске

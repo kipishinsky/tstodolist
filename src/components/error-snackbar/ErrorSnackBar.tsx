@@ -18,8 +18,7 @@ export function ErrorSnackBar() {
 		if (reason === 'clickaway') {
 			return
 		}
-		dispatch(setErrorAC(null))
-		//setOpen(false)
+		dispatch(setErrorAC({error: null}))
 	}
 
 	const error = useSelector<RootStateType, string | null>( state => state.app.error)
