@@ -1,5 +1,5 @@
 import React from 'react'
-import {AddNewItemComponent} from './AddNewItemComponent'
+import {AddNewItemComponent} from '../../components/add-new-item/AddNewItemComponent'
 import {action} from '@storybook/addon-actions'
 
 export default {

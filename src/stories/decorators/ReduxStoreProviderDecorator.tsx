@@ -5,10 +5,10 @@ import {tasksReducer} from '../../components/todolists-lists/todolist/tasks-redu
 import {todolistsReducer} from '../../components/todolists-lists/todolist/todolists-reducer/todolists-reducer'
 import {v1} from 'uuid'
 import {RootStateType} from '../../components/app/store'
-import {TaskPriorities, TaskStatuses} from '../../api/tasks/tasks-api'
 import {appReducer} from '../../components/app/app-reducer'
 import {authReducer} from '../../components/login/auth-reducer'
 import thunkMiddleware from 'redux-thunk'
+import {TaskPriorities, TaskStatuses} from '../../common/types'
 
 const rootReducer = combineReducers({
 	todolists: todolistsReducer,

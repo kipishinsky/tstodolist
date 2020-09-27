@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 
 export default {
 	title: 'Login API'
@@ -10,8 +10,6 @@ type DataType = {
 	rememberMe: boolean | string,
 	captcha?: string | boolean
 }
-
-
 
 export const Login = () => {
 
@@ -36,9 +34,15 @@ export const Login = () => {
 
 	return <div> {JSON.stringify(result)}
 		<div>
-			<input placeholder={'login'} type="text" value={email} onChange={ (e) => {setEmail(e.currentTarget.value)}}/>
-			<input placeholder={'password'} type="password" value={password} onChange={ (e) => {setPassword(e.currentTarget.value)}} />
-			<input type="checkbox" onChange={ (e) => {setRememberMe(e.currentTarget.value)}} />
+			<input placeholder={'login'} type="text" value={email} onChange={(e) => {
+				setEmail(e.currentTarget.value)
+			}}/>
+			<input placeholder={'password'} type="password" value={password} onChange={(e) => {
+				setPassword(e.currentTarget.value)
+			}}/>
+			<input type="checkbox" onChange={(e) => {
+				setRememberMe(e.currentTarget.value)
+			}}/>
 			<button onClick={createLogin}>login</button>
 		</div>
 	</div>

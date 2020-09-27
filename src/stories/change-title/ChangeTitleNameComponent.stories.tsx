@@ -1,6 +1,6 @@
 import React from "react";
 import { action } from '@storybook/addon-actions';
-import {ChangeTitleNameComponent} from "./ChangeTitleNameComponent";
+import {ChangeTitleNameComponent} from "../../components/change-title-item/ChangeTitleNameComponent";
 
 
 export default {
