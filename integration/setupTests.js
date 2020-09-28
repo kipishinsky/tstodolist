@@ -1,6 +1,6 @@
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
+const {toMatchImageSnapshot} = require('jest-image-snapshot')
 
-expect.extend({ toMatchImageSnapshot });
+expect.extend({toMatchImageSnapshot})
 
 
 // yarn run test:integration  запустить тест

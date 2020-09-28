@@ -1,12 +1,13 @@
 import React, {useCallback, useEffect} from 'react'
-import {AddNewItemComponent} from '../../add-new-item/AddNewItemComponent'
-import {ChangeTitleNameComponent} from '../../change-title-item/ChangeTitleNameComponent'
+import {AddNewItemComponent} from '../../generic-components/add-new-item/AddNewItemComponent'
+import {ChangeTitleNameComponent} from '../../generic-components/change-title-item/ChangeTitleNameComponent'
 import {Button, IconButton} from '@material-ui/core'
 import {Delete} from '@material-ui/icons'
-import {Task} from './tasks/Task'
-import {getTasksThunkCreator} from './tasks-reducer/tasks-reducer'
+import {Task} from './task/Task'
 import {useDispatch} from 'react-redux'
-import {TaskStatuses, TodolistPropsType} from '../../../common/types'
+import {getTasksThunkCreator} from '../../../store/thunk/tasks/tasks-thunks'
+import {TodolistPropsType} from '../../../utilities/types/todolists/todolists-types'
+import {TaskStatuses} from '../../../utilities/types/todolists/tasks/tasks-type'
 
 export const TodoList = React.memo(function ({demo = false, ...props}: TodolistPropsType) {
 	console.log(' TodoList render')
@@ -47,10 +48,10 @@ export const TodoList = React.memo(function ({demo = false, ...props}: TodolistP
 
 	let tasksForTodoList = props.tasks
 	if (props.todolist.filter === 'Active') {
-		tasksForTodoList = props.tasks.filter(t => t.status === TaskStatuses.New)
+		tasksForTodoList.filter(t => t.status === TaskStatuses.New)
 	}
 	if (props.todolist.filter === 'Completed') {
-		tasksForTodoList = props.tasks.filter(t => t.status === TaskStatuses.Completed)
+		tasksForTodoList.filter(t => t.status === TaskStatuses.Completed)
 	}
 
 	return (

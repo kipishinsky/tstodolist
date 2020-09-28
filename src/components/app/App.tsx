@@ -1,28 +1,22 @@
 import React, {useCallback, useEffect} from 'react'
 import {
-	AppBar,
-	Button,
-	CircularProgress,
-	Container,
-	IconButton,
-	LinearProgress,
-	Toolbar,
-	Typography
+	AppBar, CircularProgress, LinearProgress,
+	Button, Container, IconButton, Toolbar, Typography
 } from '@material-ui/core'
 import {Menu} from '@material-ui/icons'
-import {TodolistsList} from '../todolists-lists/TodolistsList'
-import {ErrorSnackBar} from '../error-snackbar/ErrorSnackBar'
+import {Todolists} from '../todolists-lists/Todolists'
+import {Login} from '../auth/Login'
+import {ErrorSnackBar} from '../generic-components/error-snackbar/ErrorSnackBar'
 import {useDispatch, useSelector} from 'react-redux'
-import {RootStateType} from './store'
-import {initializedAppTC} from './app-reducer'
+import {initializedAppTC} from '../../store/thunk/app/app-thunks'
+import {logoutTC} from '../../store/thunk/auth/auth-thunks'
 import {BrowserRouter, Route} from 'react-router-dom'
-import {Login} from '../login/Login'
-import {logoutTC} from '../login/auth-reducer'
-import {AppPropsType, RequestStatusType} from '../../common/types'
 
-import './App.css'
+import {RootStateType} from '../../store/store'
+import {AppPropsType} from '../../utilities/types/app/app-types'
+import {RequestStatusType} from '../../utilities/types/error-status/err-st-types'
 
-export function App({demo = false}: AppPropsType) {
+export const App = ({demo = false}: AppPropsType) => {
 	console.log('App render')
 
 	const status = useSelector<RootStateType, RequestStatusType>(state => state.app.status)
@@ -51,7 +45,10 @@ export function App({demo = false}: AppPropsType) {
 				<ErrorSnackBar/>
 				<AppBar position="static">
 					<Toolbar>
-						<IconButton edge="start" color="inherit" aria-label="menu">
+						<IconButton
+							edge="start"
+							color="inherit"
+							aria-label="menu">
 							<Menu/>
 						</IconButton>
 						<Typography variant="h6">
@@ -62,9 +59,12 @@ export function App({demo = false}: AppPropsType) {
 					{status === 'loading' && <LinearProgress color={'secondary'}/>}
 				</AppBar>
 				<Container fixed>
-					<Route path={'/'} render={() => <TodolistsList demo={demo}/>}/>
-
-					<Route exact path={'/login'} render={() => <Login/>}/>
+					<Route
+						path={'/'}
+						render={() => <Todolists demo={demo}/>}/>
+					<Route
+						exact path={'/auth'}
+						render={() => <Login/>}/>
 				</Container>
 			</div>
 		</BrowserRouter>

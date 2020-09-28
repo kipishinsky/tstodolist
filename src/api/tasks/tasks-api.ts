@@ -1,5 +1,5 @@
-import {instance} from '../../common/setting-api'
-import {ResponseTasksType, TaskType, UpdateTaskModelType} from '../../common/types'
+import {instance} from '../../utilities/settings-query-api/setting-api'
+import {ResponseTasksType, TaskType, UpdateTaskModelType} from '../../utilities/types/todolists/tasks/tasks-type'
 
 export const tasksAPI = {
 	getTasks(todolistId: string) {

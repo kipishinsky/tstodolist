@@ -1,5 +1,6 @@
-import {instance} from '../../common/setting-api'
-import {LoginParametersType, ResponseType} from '../../common/types'
+import {instance} from '../../utilities/settings-query-api/setting-api'
+import {LoginParametersType} from '../../utilities/types/login/login-types'
+import {ResponseType} from '../../utilities/types/api/api-types'
 
 export const loginApi = {
 	login(data: LoginParametersType) {

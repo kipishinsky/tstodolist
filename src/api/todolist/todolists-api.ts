@@ -1,5 +1,6 @@
-import {instance} from '../../common/setting-api'
-import {TodolistType, ResponseType} from '../../common/types'
+import {instance} from '../../utilities/settings-query-api/setting-api'
+import {TodolistType} from '../../utilities/types/todolists/todolists-types'
+import {ResponseType} from '../../utilities/types/api/api-types'
 
 export const todolistsAPI = {
 	getTodolists() {

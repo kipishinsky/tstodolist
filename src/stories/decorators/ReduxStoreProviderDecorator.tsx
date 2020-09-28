@@ -1,14 +1,16 @@
 import React from 'react'
 import {Provider} from 'react-redux'
-import {applyMiddleware, combineReducers, createStore} from 'redux'
-import {tasksReducer} from '../../components/todolists-lists/todolist/tasks-reducer/tasks-reducer'
-import {todolistsReducer} from '../../components/todolists-lists/todolist/todolists-reducer/todolists-reducer'
-import {v1} from 'uuid'
-import {RootStateType} from '../../components/app/store'
-import {appReducer} from '../../components/app/app-reducer'
-import {authReducer} from '../../components/login/auth-reducer'
 import thunkMiddleware from 'redux-thunk'
-import {TaskPriorities, TaskStatuses} from '../../common/types'
+import {applyMiddleware, combineReducers, createStore} from 'redux'
+
+import {tasksReducer} from '../../store/reducers/tasks/tasks-reducer'
+import {todolistsReducer} from '../../store/reducers/todolists/todolists-reducer'
+import {appReducer} from '../../store/reducers/app/app-reducer'
+import {authReducer} from '../../store/reducers/auth/auth-reducer'
+
+import {TaskPriorities, TaskStatuses} from '../../utilities/types/todolists/tasks/tasks-type'
+import {v1} from 'uuid'
+import {RootStateType} from '../../store/store'
 
 const rootReducer = combineReducers({
 	todolists: todolistsReducer,
@@ -93,6 +95,5 @@ const initialGlobalState: RootStateType = {
 export const storyBookStore = createStore(rootReducer, initialGlobalState, applyMiddleware(thunkMiddleware))
 
 export const ReduxStoreProviderDecorator = (storyFn: any) => {
-	//debugger
 	return <Provider store={storyBookStore}>{storyFn()}</Provider>
 }

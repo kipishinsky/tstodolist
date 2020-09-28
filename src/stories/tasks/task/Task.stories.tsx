@@ -1,10 +1,10 @@
 import React from 'react'
 import {action} from '@storybook/addon-actions'
-import {Task} from '../../../components/todolists-lists/todolist/tasks/Task'
-import {TaskPriorities, TaskStatuses} from '../../../common/types'
+import {Task} from '../../../components/todolists-lists/todolist/task/Task'
+import {TaskPriorities, TaskStatuses} from '../../../utilities/types/todolists/tasks/tasks-type'
 
 export default {
-	title: 'Task Component',
+	title: 'task',
 	component: Task
 }
 

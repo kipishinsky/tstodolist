@@ -1,15 +1,13 @@
 import React from "react";
 import { action } from '@storybook/addon-actions';
-import {ChangeTitleNameComponent} from "../../components/change-title-item/ChangeTitleNameComponent";
-
+import {ChangeTitleNameComponent} from "../../components/generic-components/change-title-item/ChangeTitleNameComponent";
 
 export default {
-    title: 'ChangeTitleName Component',
+    title: 'change title name component',
     component: ChangeTitleNameComponent
 }
 
 const changeCallback = action('value changed');
-
 
 export const ChangeTitleNameBaseExample = () => {
     return <ChangeTitleNameComponent
